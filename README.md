@@ -154,4 +154,5 @@ Each is marked with a comment in the source.
 A static build — `dist/` can be dropped on any host. Because everything is one
 page there are no route rewrites to configure.
 #   H L G  
+ #   H L G  
  
