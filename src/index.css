@@ -1,0 +1,305 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   HLG REAL ESTATE — Design tokens
+   Derived from "HLG REAL ESTATE BRAND GUIDELINE" (p.08 colours, p.09 type)
+   ========================================================================== */
+@theme {
+  /* Brand palette — exact guideline values */
+  --color-anthracite: #1c1c1e;
+  --color-bronze: #9c6625;
+  --color-bronze-soft: #b88d5b;
+  --color-offwhite: #f5f3ef;
+  --color-gray-bronze: #6c6c6c; /* guideline: gray value for Bronze */
+  --color-gray-soft: #bcbcbc; /* guideline: gray value for Soft Bronze */
+
+  /* Working tints derived from the palette (never replaces brand colours) */
+  --color-ink-900: #131315;
+  --color-ink-800: #1c1c1e;
+  --color-ink-700: #232326;
+  --color-ink-600: #2e2e32;
+  --color-ink-500: #3a3a3f;
+  --color-sand-100: #faf9f7;
+  --color-sand-200: #efece6;
+  --color-sand-300: #e2ddd4;
+
+  /* Typography — Nunito (monogram / display) + Inter (text) */
+  --font-display: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Motion */
+  --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-cine: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: auto; /* Lenis owns scrolling */
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-anthracite);
+    color: var(--color-offwhite);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-bronze);
+    color: var(--color-offwhite);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Scrollbar — thin, bronze */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink-900);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-600);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-bronze);
+  }
+
+  /* Lenis */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+}
+
+/*
+ * These live in the components layer, not utilities, so that real Tailwind
+ * utilities still win. Emitted into @layer utilities they would come after
+ * Tailwind own rules at equal specificity - and .link-underline{display:inline-block}
+ * would quietly defeat .hidden, leaving "mobile-hidden" elements on screen.
+ */
+@layer components {
+  /* --- Editorial type scale ------------------------------------------- */
+  .display-xl {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+    font-size: clamp(2.75rem, 9vw, 9rem);
+  }
+  .display-lg {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    font-size: clamp(2.75rem, 7.5vw, 7rem);
+  }
+  .display-md {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    font-size: clamp(2rem, 4.6vw, 4rem);
+  }
+  .display-sm {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  }
+
+  /* Overlay navigation - sized from viewport height so the six items plus
+     the contact block always fit without scrolling. */
+  .menu-item {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    font-size: clamp(1.75rem, min(5.6vh, 6vw), 4.25rem);
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: clamp(0.625rem, 0.78vw, 0.72rem);
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .body-lg {
+    font-size: clamp(1rem, 1.25vw, 1.175rem);
+    line-height: 1.65;
+    font-weight: 300;
+    letter-spacing: -0.005em;
+  }
+  .body-base {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* --- Layout ---------------------------------------------------------- */
+  .shell {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 5.5rem);
+    max-width: 1680px;
+  }
+  .shell-tight {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 5vw, 5.5rem);
+    max-width: 1180px;
+  }
+  .section-y {
+    padding-block: clamp(5rem, 12vh, 10rem);
+  }
+
+  /* --- Surfaces & lines ------------------------------------------------ */
+  .hairline {
+    border-color: color-mix(in srgb, var(--color-offwhite) 12%, transparent);
+  }
+  .hairline-dark {
+    border-color: color-mix(in srgb, var(--color-anthracite) 12%, transparent);
+  }
+  .glass {
+    background: color-mix(in srgb, var(--color-ink-800) 86%, transparent);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+  }
+
+  /* Bronze gradient text (uses both brand bronzes) */
+  .text-bronze-grad {
+    background: linear-gradient(
+      100deg,
+      var(--color-bronze) 0%,
+      var(--color-bronze-soft) 48%,
+      var(--color-bronze) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Guideline p.10 — monogram chevron outline used as a background pattern */
+  .chevron-field {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cpath d='M22 96 L90 28 L158 96' fill='none' stroke='%23B88D5B' stroke-width='2.2' stroke-linecap='round' stroke-opacity='0.16'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+
+  .noise::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* --- Text clipping masks for reveals --------------------------------- */
+  .line-mask {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  /* --- Interactive ----------------------------------------------------- */
+  .link-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.18em;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.6s var(--ease-brand);
+  }
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .no-cursor {
+    cursor: none;
+  }
+}
+
+/* Hide the native cursor only where the custom one is active */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
