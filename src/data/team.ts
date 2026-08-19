@@ -17,7 +17,7 @@ export const team: Member[] = [
   {
     id: 'director',
     name: 'Adrien Laurent',
-    role: 'Managing Director',
+    role: 'Founder & CEO',
     bio: 'Fifteen years between European private banking and Gulf real estate. Adrien built HLG around a single conviction: advice you would give your own family, or none at all.',
     languages: 'English / French / Arabic',
     image:

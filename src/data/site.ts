@@ -15,6 +15,8 @@ export const site = {
   whatsappHref: 'https://wa.me/971506500206',
   website: 'www.hlgrealestate.com',
   address: 'Business Bay, Dubai - United Arab Emirates',
+  /** Used by the map embed. Replace with the exact office coordinates. */
+  geo: { lat: 25.1857, lng: 55.2645 },
   social: [
     {
       label: 'LinkedIn',
@@ -34,14 +36,20 @@ export const site = {
 /**
  * The site is a single scroll narrative - every nav entry is a section on the
  * page, not a route. `id` is both the DOM id and the hash used for deep links.
+ * `short` is what the header shows; the menu overlay and footer use `label`,
+ * where there is room for the fuller wording.
  */
 export const nav = [
-  { label: 'Home', id: 'home', index: '01' },
-  { label: 'About Us', id: 'about', index: '02' },
-  { label: 'Services', id: 'services', index: '03' },
-  { label: 'Properties', id: 'properties', index: '04' },
-  { label: 'Our Team', id: 'team', index: '05' },
-  { label: 'Contact', id: 'contact', index: '06' },
+  { label: 'Home', short: 'Home', id: 'home', index: '01' },
+  { label: 'About Us', short: 'About', id: 'about', index: '02' },
+  { label: 'Buy', short: 'Buy', id: 'buy', index: '03' },
+  { label: 'Sell', short: 'Sell', id: 'sell', index: '04' },
+  { label: 'Rent', short: 'Rent', id: 'rent', index: '05' },
+  { label: 'Properties', short: 'Properties', id: 'properties', index: '06' },
+  { label: 'Developers', short: 'Developers', id: 'developers', index: '07' },
+  { label: 'Blog', short: 'Blog', id: 'blog', index: '08' },
+  { label: 'Our Team', short: 'Team', id: 'team', index: '09' },
+  { label: 'Contact', short: 'Contact', id: 'contact', index: '10' },
 ] as const
 
 export type NavItem = (typeof nav)[number]

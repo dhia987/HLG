@@ -429,3 +429,68 @@ export function shortPrice(p: Property) {
   const s = v >= 1_000_000 ? `${(v / 1_000_000).toFixed(v % 1_000_000 === 0 ? 0 : 1)}M` : `${Math.round(v / 1000)}K`
   return `${p.currency} ${s}${p.listing === 'rent' ? (p.period === 'month' ? '/mo' : '/yr') : ''}`
 }
+
+export const propertyTypes = Array.from(new Set(properties.map((p) => p.type))).sort()
+
+/**
+ * Budget brackets. Sale and rental prices live on completely different scales,
+ * so the search console swaps the whole band list when the intent changes
+ * rather than trying to make one set of numbers serve both.
+ */
+export type Band = { id: string; label: string; min: number; max: number }
+
+export const priceBands: Record<Listing, Band[]> = {
+  buy: [
+    { id: 'any', label: 'Any budget', min: 0, max: Infinity },
+    { id: 'u5', label: 'Up to AED 5M', min: 0, max: 5_000_000 },
+    { id: '5-15', label: 'AED 5M - 15M', min: 5_000_000, max: 15_000_000 },
+    { id: '15-35', label: 'AED 15M - 35M', min: 15_000_000, max: 35_000_000 },
+    { id: '35+', label: 'AED 35M +', min: 35_000_000, max: Infinity },
+  ],
+  rent: [
+    { id: 'any', label: 'Any budget', min: 0, max: Infinity },
+    { id: 'u150', label: 'Up to AED 150k / yr', min: 0, max: 150_000 },
+    { id: '150-300', label: 'AED 150k - 300k / yr', min: 150_000, max: 300_000 },
+    { id: '300-500', label: 'AED 300k - 500k / yr', min: 300_000, max: 500_000 },
+    { id: '500+', label: 'AED 500k + / yr', min: 500_000, max: Infinity },
+  ],
+}
+
+/** Rent is quoted monthly or yearly; normalise before comparing to a band. */
+export const annualisedPrice = (p: Property) =>
+  p.listing === 'rent' && p.period === 'month' ? p.price * 12 : p.price
+
+export type Criteria = {
+  listing: Listing
+  community: string
+  type: string
+  beds: string
+  band: string
+  status: string
+}
+
+export const emptyCriteria: Criteria = {
+  listing: 'buy',
+  community: 'all',
+  type: 'all',
+  beds: 'any',
+  band: 'any',
+  status: 'all',
+}
+
+export const STATUSES = ['all', 'Ready', 'Off-plan', 'Off-market'] as const
+
+export function matches(p: Property, c: Criteria) {
+  if (p.listing !== c.listing) return false
+  if (c.community !== 'all' && p.community !== c.community) return false
+  if (c.type !== 'all' && p.type !== c.type) return false
+  if (c.beds !== 'any' && p.beds < Number(c.beds)) return false
+  if (c.status !== 'all' && p.status !== c.status) return false
+
+  const band = priceBands[c.listing].find((b) => b.id === c.band)
+  if (band && band.id !== 'any') {
+    const v = annualisedPrice(p)
+    if (v < band.min || v > band.max) return false
+  }
+  return true
+}

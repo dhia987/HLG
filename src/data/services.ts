@@ -1,13 +1,15 @@
 import { img } from './images'
 
 export type Service = {
-  id: string
+  id: 'buy' | 'sell' | 'rent'
   index: string
   title: string
   short: string
   body: string
   points: string[]
   image: string
+  /** Label on the section CTA. */
+  action: string
 }
 
 export const services: Service[] = [
@@ -24,6 +26,7 @@ export const services: Service[] = [
       'Golden Visa pathway guidance',
     ],
     image: img.villaPool,
+    action: 'View properties',
   },
   {
     id: 'sell',
@@ -32,12 +35,13 @@ export const services: Service[] = [
     short: 'Positioning & disposal',
     body: 'A property is a story before it is a listing. We build the narrative - photography, staging, pricing architecture - then take it to a qualified audience rather than an open one, so the asset is met at its true value.',
     points: [
+      'Same-week valuation',
       'Editorial photography & film',
-      'Valuation & pricing strategy',
       'Qualified private buyer network',
-      'Negotiation through to transfer',
+      'Negotiation through to DLD transfer',
     ],
     image: img.villaDusk,
+    action: 'Request a valuation',
   },
   {
     id: 'rent',
@@ -52,33 +56,6 @@ export const services: Service[] = [
       'Relocation & handover support',
     ],
     image: img.livingWarm,
-  },
-  {
-    id: 'manage',
-    index: '04',
-    title: 'Manage',
-    short: 'Property & portfolio care',
-    body: 'Ownership from abroad should feel like ownership next door. We hold the keys, the contractors, the compliance calendar and the reporting. You hold the returns.',
-    points: [
-      'Full property management',
-      'Maintenance & snagging',
-      'Quarterly performance reporting',
-      'Service charge oversight',
-    ],
-    image: img.livingStair,
-  },
-  {
-    id: 'advisory',
-    index: '05',
-    title: 'Advisory',
-    short: 'Strategy & market intelligence',
-    body: 'The Dubai market moves in cycles, communities and handover waves. We read them for you - where value is forming, where it has already been priced in, and when patience outperforms action.',
-    points: [
-      'Market & community analysis',
-      'Portfolio structuring',
-      'Handover wave forecasting',
-      'Residency & relocation advisory',
-    ],
-    image: img.cityNight,
+    action: 'View properties',
   },
 ]

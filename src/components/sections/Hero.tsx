@@ -8,7 +8,6 @@ import { img, wide } from '../../data/images'
 import { CTA } from '../ui/Button'
 import { MaskWords } from '../ui/Reveal'
 import { Magnetic } from '../ui/Magnetic'
-import { Logo } from '../brand/Logo'
 
 const FRAMES = [
   { src: wide(img.cityDawn), caption: 'Downtown Dubai' },
@@ -18,10 +17,10 @@ const FRAMES = [
 ]
 
 /**
- * Home masthead. The full lockup leads - the first thing on screen names the
- * company - with the tagline beneath it and a slow four-frame cross-dissolve of
- * the city behind. Each frame eases out of an over-scale across six seconds,
- * long enough to read as film rather than as a slideshow.
+ * Home masthead. A slow four-frame cross-dissolve of the city runs behind the
+ * tagline, each frame easing out of an over-scale across six seconds - long
+ * enough to read as film rather than as a slideshow. The brand mark lives in
+ * the header rather than here, so the type carries the opening on its own.
  */
 export function Hero({ ready }: { ready: boolean }) {
   const ref = useRef<HTMLElement>(null)
@@ -47,7 +46,7 @@ export function Hero({ ready }: { ready: boolean }) {
     <section
       id="home"
       ref={ref}
-      className="noise relative flex h-[100svh] min-h-[660px] flex-col justify-end overflow-hidden"
+      className="noise relative flex h-[100svh] min-h-[640px] flex-col justify-end overflow-hidden"
     >
       {/* cinematic backplate */}
       <motion.div className="absolute inset-0" style={reduced ? undefined : { y: bgY }}>
@@ -68,8 +67,8 @@ export function Hero({ ready }: { ready: boolean }) {
         </AnimatePresence>
       </motion.div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1E] via-[#1C1C1E]/45 to-[#1C1C1E]/65" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#1C1C1E]/80 via-[#1C1C1E]/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1E] via-[#1C1C1E]/40 to-[#1C1C1E]/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1C1C1E]/75 via-[#1C1C1E]/15 to-transparent" />
 
       <motion.div
         className="shell relative pb-14 md:pb-16"
@@ -82,47 +81,28 @@ export function Hero({ ready }: { ready: boolean }) {
           className="eyebrow mb-8 flex flex-wrap items-center gap-3 text-[#B88D5B]"
         >
           <span className="h-1.5 w-1.5 rotate-45 bg-[#9C6625]" />
-          {site.legalName}
-          <span className="h-1 w-1 rotate-45 bg-[#9C6625]/60" />
-          {site.city}, {site.country}
+          {site.city}
+          <span className="text-[#F5F3EF]/25">/</span> Buy
+          <span className="text-[#F5F3EF]/25">/</span> Sell
+          <span className="text-[#F5F3EF]/25">/</span> Rent
         </motion.p>
 
-        {/* The lockup itself is the headline - it is the fastest way to say
-            whose website this is, and the guideline allows it at full colour
-            over photography (p.07). */}
-        <h1 className="sr-only">
-          {site.name} &mdash; {site.tagline}
-        </h1>
-
-        <div className="line-mask mb-9 md:mb-11">
-          <motion.div
-            initial={{ y: '108%' }}
-            animate={{ y: '0%' }}
-            transition={{ duration: 1.25, ease: EASE, delay: d + 0.12 }}
-          >
-            <Logo
-              variant="white"
-              className="h-auto w-[min(86vw,640px)] drop-shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
-            />
-          </motion.div>
-        </div>
-
-        <p className="display-md">
-          <MaskWords text="The Key to Your" playOnMount delay={d + 0.5} className="text-[#F5F3EF]" />
+        <h1 className="display-xl max-w-[15ch]">
+          <MaskWords text="The Key to Your" playOnMount delay={d + 0.16} />
           <br />
           <MaskWords
             text="Next Chapter"
             wordClassName="text-bronze-grad"
             playOnMount
-            delay={d + 0.66}
+            delay={d + 0.34}
           />
-        </p>
+        </h1>
 
         <div className="mt-10 flex flex-col gap-9 lg:flex-row lg:items-end lg:justify-between">
           <motion.p
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: EASE, delay: d + 0.9 }}
+            transition={{ duration: 1, ease: EASE, delay: d + 0.65 }}
             className="body-lg max-w-md text-[#F5F3EF]/70"
           >
             A {site.city} real estate house for buying, selling and renting exceptional
@@ -132,7 +112,7 @@ export function Hero({ ready }: { ready: boolean }) {
           <motion.div
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: EASE, delay: d + 1 }}
+            transition={{ duration: 1, ease: EASE, delay: d + 0.75 }}
             className="flex flex-wrap items-center gap-4"
           >
             <CTA onClick={() => goTo('properties')} tone="bronze">
@@ -149,7 +129,7 @@ export function Hero({ ready }: { ready: boolean }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: d + 1.15 }}
+        transition={{ duration: 1, delay: d + 0.9 }}
         className="shell relative flex items-center justify-between border-t hairline py-5"
       >
         <Magnetic strength={0.3}>

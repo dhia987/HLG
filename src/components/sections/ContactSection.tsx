@@ -5,10 +5,11 @@ import { site } from '../../data/site'
 import { CTA } from '../ui/Button'
 import { Monogram } from '../brand/Monogram'
 import { SectionHeading } from './SectionHeading'
+import { useSearch } from '../../lib/SearchContext'
 
 type Status = 'idle' | 'sending' | 'sent'
 
-const INTENTS = ['Buy', 'Sell', 'Rent', 'Manage', 'Advisory'] as const
+const INTENTS = ['Buy', 'Sell', 'Rent'] as const
 
 const fieldCls =
   'peer w-full border-0 border-b hairline bg-transparent pb-3 pt-6 text-base font-light text-[#F5F3EF] outline-none transition-colors duration-500 placeholder:text-transparent focus:border-[#9C6625]'
@@ -16,7 +17,8 @@ const labelCls =
   'pointer-events-none absolute left-0 top-6 origin-left text-sm font-light text-[#F5F3EF]/40 transition-all duration-500 peer-focus:top-0 peer-focus:text-[0.65rem] peer-focus:uppercase peer-focus:tracking-[0.2em] peer-focus:text-[#B88D5B] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[0.65rem] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:text-[#B88D5B]'
 
 export function ContactSection() {
-  const [intent, setIntent] = useState<(typeof INTENTS)[number]>('Buy')
+  // Selecting a desk upstairs pre-selects the matching enquiry type here.
+  const { contactIntent, setContactIntent } = useSearch()
   const [status, setStatus] = useState<Status>('idle')
 
   /**
@@ -87,11 +89,11 @@ export function ContactSection() {
                         <button
                           key={it}
                           type="button"
-                          onClick={() => setIntent(it)}
+                          onClick={() => setContactIntent(it)}
                           data-cursor="link"
-                          aria-pressed={intent === it}
+                          aria-pressed={contactIntent === it}
                           className={`relative overflow-hidden rounded-full border px-6 py-3 text-[0.7rem] font-medium uppercase tracking-[0.18em] transition-colors duration-500 ${
-                            intent === it
+                            contactIntent === it
                               ? 'border-[#9C6625] bg-[#9C6625] text-[#F5F3EF]'
                               : 'hairline text-[#F5F3EF]/60 hover:border-[#9C6625]'
                           }`}

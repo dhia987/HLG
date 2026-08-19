@@ -1,18 +1,23 @@
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react'
 import { useMemo, useState } from 'react'
 import { EASE, inView } from '../../lib/motion'
-import { communities, properties, type Listing } from '../../data/properties'
+import {
+  communities,
+  priceBands,
+  properties,
+  propertyTypes,
+  type Listing,
+} from '../../data/properties'
+import { useSearch } from '../../lib/SearchContext'
 import { PropertyCard } from './PropertyCard'
 import { FeaturedRail } from './FeaturedRail'
 import { SectionHeading } from './SectionHeading'
 import { CTA } from '../ui/Button'
 import { useSectionNav } from '../../lib/useSectionNav'
 
-type Tab = 'all' | Listing
 type Sort = 'featured' | 'price-desc' | 'price-asc' | 'area-desc'
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'all', label: 'All' },
+const TABS: { id: Listing; label: string }[] = [
   { id: 'buy', label: 'Buy' },
   { id: 'rent', label: 'Rent' },
 ]
@@ -37,41 +42,42 @@ const selectArrow = {
 
 export function PropertiesSection() {
   const { goTo } = useSectionNav()
-  const [tab, setTab] = useState<Tab>('all')
-  const [community, setCommunity] = useState('all')
-  const [beds, setBeds] = useState('any')
+  // Shared with the Buy/Sell/Rent console, so arriving from a search lands
+  // here with the rail already showing the brief that was set upstairs.
+  const { criteria, setCriterion, resetCriteria, results } = useSearch()
   const [sort, setSort] = useState<Sort>('featured')
 
-  const results = useMemo(() => {
-    const list = properties.filter((p) => {
-      if (tab !== 'all' && p.listing !== tab) return false
-      if (community !== 'all' && p.community !== community) return false
-      if (beds !== 'any' && p.beds < Number(beds)) return false
-      return true
-    })
+  const sorted = useMemo(
+    () =>
+      [...results].sort((a, b) => {
+        switch (sort) {
+          case 'price-desc':
+            return b.price - a.price
+          case 'price-asc':
+            return a.price - b.price
+          case 'area-desc':
+            return b.area - a.area
+          default:
+            return Number(Boolean(b.featured)) - Number(Boolean(a.featured))
+        }
+      }),
+    [results, sort],
+  )
 
-    return [...list].sort((a, b) => {
-      switch (sort) {
-        case 'price-desc':
-          return b.price - a.price
-        case 'price-asc':
-          return a.price - b.price
-        case 'area-desc':
-          return b.area - a.area
-        default:
-          return Number(Boolean(b.featured)) - Number(Boolean(a.featured))
-      }
-    })
-  }, [tab, community, beds, sort])
-
-  const dirty = tab !== 'all' || community !== 'all' || beds !== 'any' || sort !== 'featured'
+  const dirty =
+    criteria.community !== 'all' ||
+    criteria.type !== 'all' ||
+    criteria.beds !== 'any' ||
+    criteria.band !== 'any' ||
+    criteria.status !== 'all' ||
+    sort !== 'featured'
 
   const reset = () => {
-    setTab('all')
-    setCommunity('all')
-    setBeds('any')
+    resetCriteria()
     setSort('featured')
   }
+
+  const total = properties.filter((p) => p.listing === criteria.listing).length
 
   return (
     <section id="properties" className="scroll-mt-24">
@@ -98,12 +104,12 @@ export function PropertiesSection() {
                 {TABS.map((t) => (
                   <button
                     key={t.id}
-                    onClick={() => setTab(t.id)}
+                    onClick={() => setCriterion('listing', t.id)}
                     data-cursor="link"
-                    aria-pressed={tab === t.id}
-                    className="relative rounded-full px-6 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] transition-colors duration-500"
+                    aria-pressed={criteria.listing === t.id}
+                    className="relative rounded-full px-7 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] transition-colors duration-500"
                   >
-                    {tab === t.id && (
+                    {criteria.listing === t.id && (
                       <motion.span
                         layoutId="tab-pill"
                         className="absolute inset-0 rounded-full bg-[#9C6625]"
@@ -112,7 +118,7 @@ export function PropertiesSection() {
                     )}
                     <span
                       className={`relative z-10 ${
-                        tab === t.id ? 'text-[#F5F3EF]' : 'text-[#F5F3EF]/55'
+                        criteria.listing === t.id ? 'text-[#F5F3EF]' : 'text-[#F5F3EF]/55'
                       }`}
                     >
                       {t.label}
@@ -122,14 +128,14 @@ export function PropertiesSection() {
               </div>
             </LayoutGroup>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:w-auto">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:w-auto lg:grid-cols-5">
               <label className="sr-only" htmlFor="f-community">
                 Community
               </label>
               <select
                 id="f-community"
-                value={community}
-                onChange={(e) => setCommunity(e.target.value)}
+                value={criteria.community}
+                onChange={(e) => setCriterion('community', e.target.value)}
                 className={selectCls}
                 style={selectArrow}
                 data-cursor="link"
@@ -142,13 +148,32 @@ export function PropertiesSection() {
                 ))}
               </select>
 
+              <label className="sr-only" htmlFor="f-type">
+                Property type
+              </label>
+              <select
+                id="f-type"
+                value={criteria.type}
+                onChange={(e) => setCriterion('type', e.target.value)}
+                className={selectCls}
+                style={selectArrow}
+                data-cursor="link"
+              >
+                <option value="all">Any type</option>
+                {propertyTypes.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+
               <label className="sr-only" htmlFor="f-beds">
                 Bedrooms
               </label>
               <select
                 id="f-beds"
-                value={beds}
-                onChange={(e) => setBeds(e.target.value)}
+                value={criteria.beds}
+                onChange={(e) => setCriterion('beds', e.target.value)}
                 className={selectCls}
                 style={selectArrow}
                 data-cursor="link"
@@ -161,6 +186,24 @@ export function PropertiesSection() {
                 ))}
               </select>
 
+              <label className="sr-only" htmlFor="f-band">
+                Budget
+              </label>
+              <select
+                id="f-band"
+                value={criteria.band}
+                onChange={(e) => setCriterion('band', e.target.value)}
+                className={selectCls}
+                style={selectArrow}
+                data-cursor="link"
+              >
+                {priceBands[criteria.listing].map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.label}
+                  </option>
+                ))}
+              </select>
+
               <label className="sr-only" htmlFor="f-sort">
                 Sort
               </label>
@@ -168,7 +211,7 @@ export function PropertiesSection() {
                 id="f-sort"
                 value={sort}
                 onChange={(e) => setSort(e.target.value as Sort)}
-                className={`${selectCls} col-span-2 sm:col-span-1`}
+                className={`${selectCls} col-span-2 sm:col-span-3 lg:col-span-1`}
                 style={selectArrow}
                 data-cursor="link"
               >
@@ -181,34 +224,34 @@ export function PropertiesSection() {
             </div>
           </div>
 
-          <div className="mb-10 mt-6 flex items-baseline justify-between">
+          <div className="mb-10 mt-6 flex items-baseline justify-between gap-6">
             <p className="eyebrow text-[#F5F3EF]/45">
               <motion.span
-                key={results.length}
+                key={sorted.length}
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
                 className="inline-block text-[#B88D5B]"
               >
-                {String(results.length).padStart(2, '0')}
+                {String(sorted.length).padStart(2, '0')}
               </motion.span>{' '}
-              {results.length === 1 ? 'Property' : 'Properties'}
+              of {String(total).padStart(2, '0')} {criteria.listing === 'buy' ? 'for sale' : 'to rent'}
             </p>
             {dirty && (
               <button
                 onClick={reset}
                 data-cursor="link"
-                className="link-underline eyebrow text-[#F5F3EF]/45"
+                className="link-underline eyebrow shrink-0 text-[#F5F3EF]/45"
               >
                 Clear filters
               </button>
             )}
           </div>
 
-          {results.length > 0 ? (
+          {sorted.length > 0 ? (
             <motion.div layout className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
               <AnimatePresence mode="popLayout">
-                {results.map((p, i) => (
+                {sorted.map((p, i) => (
                   <PropertyCard key={p.id} p={p} index={i} />
                 ))}
               </AnimatePresence>
@@ -248,7 +291,7 @@ export function PropertiesSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={inView}
           transition={{ duration: 0.8, ease: EASE }}
-          className="shell flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center"
+          className="shell flex flex-col items-start justify-between gap-8 md:p-0 lg:flex-row lg:items-center"
         >
           <div>
             <p className="eyebrow mb-4 text-[#B88D5B]">Off-market</p>

@@ -81,12 +81,12 @@ export function Footer() {
         </nav>
 
         <div>
-          <p className="eyebrow mb-6 text-[#B88D5B]">Services</p>
+          <p className="eyebrow mb-6 text-[#B88D5B]">Desks</p>
           <ul className="space-y-3">
             {services.map((s) => (
               <li key={s.id}>
                 <button
-                  onClick={() => goTo('services')}
+                  onClick={() => goTo(s.id)}
                   data-cursor="link"
                   className="link-underline body-base text-[#F5F3EF]/70"
                 >

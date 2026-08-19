@@ -88,7 +88,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
             className="absolute bottom-8 right-6 md:bottom-12 md:right-12"
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
           >
-            <span className="font-display text-5xl font-light tabular-nums text-[#F5F3EF]/70 md:text-7xl">
+            <span className="brand-type text-5xl font-light tabular-nums text-[#F5F3EF]/70 md:text-7xl">
               {String(count).padStart(3, '0')}
             </span>
           </motion.div>

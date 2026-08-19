@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform, type MotionValue } from 'motion/react'
 import { useRef } from 'react'
 import { EASE, inView } from '../../lib/motion'
 import { site } from '../../data/site'
+import { team } from '../../data/team'
 import { img } from '../../data/images'
 import { Drift, ParallaxImage } from '../ui/Parallax'
 import { MaskText, Reveal } from '../ui/Reveal'
@@ -10,10 +11,13 @@ import { Monogram } from '../brand/Monogram'
 import { SectionHeading } from './SectionHeading'
 import { useSectionNav } from '../../lib/useSectionNav'
 
+/** The founder block reads from the same record as the team grid. */
+const founderProfile = team[0]
+
 const STATEMENT =
   'HLG is Home & Leisure Group. We buy, sell and let property in Dubai for people who intend to live with their decision - not trade out of it by Friday. Fewer listings, longer conversations, better outcomes.'
 
-const VALUES = [
+const REASONS = [
   {
     k: '01',
     t: 'Judgement over inventory',
@@ -33,6 +37,16 @@ const VALUES = [
     k: '04',
     t: 'Long after the keys',
     d: 'Handover is the middle of the relationship, not the end. Management, re-lets and eventual exit are part of the same conversation.',
+  },
+  {
+    k: '05',
+    t: 'Access before the portals',
+    d: 'Developer allocations and private instructions reach us first. A meaningful share of what we transact is never publicly listed at all.',
+  },
+  {
+    k: '06',
+    t: 'One team, end to end',
+    d: 'Search, negotiation, DLD transfer, mortgage introduction, snagging, tenancy. You are not handed to a different company at every stage.',
   },
 ]
 
@@ -136,7 +150,7 @@ export function AboutSection() {
             <Drift distance={40} className="absolute -bottom-10 -right-6 hidden lg:block">
               <div className="bg-[#F5F3EF] px-7 py-6 text-[#1C1C1E]">
                 <Monogram variant="black" className="mb-4 h-8 w-8" />
-                <p className="max-w-[16ch] font-display text-lg font-bold leading-tight tracking-tight">
+                <p className="brand-type max-w-[16ch] text-lg leading-tight">
                   {site.tagline}
                 </p>
               </div>
@@ -182,16 +196,106 @@ export function AboutSection() {
         </div>
       </div>
 
+      {/* --- founder ---------------------------------------------------------- */}
+      <div className="relative overflow-hidden border-b hairline section-y">
+        <Drift
+          distance={50}
+          className="pointer-events-none absolute -right-[8vw] top-1/2 hidden -translate-y-1/2 lg:block"
+        >
+          <Monogram variant="white" className="h-[30vw] w-[30vw] opacity-[0.03]" />
+        </Drift>
+
+        <div className="shell relative grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+          <div className="relative">
+            <ParallaxImage
+              src={founderProfile.image}
+              alt={founderProfile.name}
+              className="aspect-[3/4] w-full"
+              imgClassName="grayscale"
+              strength={8}
+            />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#1C1C1E] to-transparent" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={inView}
+              transition={{ duration: 0.8, ease: EASE, delay: 0.25 }}
+              className="absolute -bottom-6 -right-4 hidden bg-[#9C6625] px-6 py-5 sm:block"
+            >
+              <p className="eyebrow mb-2 text-[#F5F3EF]/75">Founder &amp; CEO</p>
+              <p className="display-sm leading-none">{founderProfile.name}</p>
+            </motion.div>
+          </div>
+
+          <div className="lg:pt-6">
+            <SectionHeading
+              eyebrow="CEO &amp; Founder"
+              lines={['The person who', <span className="text-bronze-grad">signs the advice.</span>]}
+            />
+
+            <div className="mt-9 space-y-6">
+              <Reveal>
+                <p className="body-lg text-[#F5F3EF]/70">
+                  &ldquo;I spent fifteen years between European private banking and Gulf real
+                  estate, and the thing that struck me about Dubai was how little of the market
+                  was built around advice. Plenty of inventory. Very little judgement.&rdquo;
+                </p>
+              </Reveal>
+              <Reveal delay={1}>
+                <p className="body-base text-[#F5F3EF]/55">
+                  &ldquo;HLG exists to close that gap. We keep the bench small so every mandate
+                  has a named owner, and we turn work away when the numbers do not hold. That is
+                  a slower way to build a brokerage. It is the only way I would want one built
+                  if the money were my own.&rdquo;
+                </p>
+              </Reveal>
+              <Reveal delay={2}>
+                <p className="body-base text-[#F5F3EF]/55">
+                  &ldquo;If you are considering Dubai, ask us the awkward questions. The answers
+                  are the whole product.&rdquo;
+                </p>
+              </Reveal>
+
+              <Reveal delay={3}>
+                <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 border-t hairline pt-8">
+                  <div>
+                    <p className="brand-type text-lg">{founderProfile.name}</p>
+                    <p className="eyebrow mt-2 text-[#F5F3EF]/45">
+                      Founder &amp; CEO &nbsp;/&nbsp; {founderProfile.languages}
+                    </p>
+                  </div>
+                  <a
+                    href={founderProfile.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor="link"
+                    className="link-underline eyebrow text-[#B88D5B]"
+                  >
+                    LinkedIn
+                  </a>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* --- how we work ----------------------------------------------------- */}
       <div className="relative overflow-hidden border-b hairline bg-[#131315] section-y">
         <div className="chevron-field pointer-events-none absolute inset-0 opacity-30" />
         <div className="shell relative">
           <SectionHeading
-            eyebrow="How we work"
-            lines={['Four rules we', <span className="text-bronze-grad">do not bend.</span>]}
+            eyebrow="Why choose HLG"
+            lines={['Six reasons', <span className="text-bronze-grad">clients stay.</span>]}
+            aside={
+              <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
+                Ninety-seven percent of our business is repeat or referred. These are the
+                reasons people give when we ask them why.
+              </p>
+            }
           />
-          <ul className="mt-16 grid gap-x-16 gap-y-4 md:grid-cols-2">
-            {VALUES.map((v, i) => (
+          <ul className="mt-16 grid gap-x-14 gap-y-4 md:grid-cols-2">
+            {REASONS.map((v, i) => (
               <motion.li
                 key={v.k}
                 initial={{ opacity: 0, y: 30 }}

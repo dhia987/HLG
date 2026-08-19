@@ -31,7 +31,13 @@ export function Cursor() {
   // Horizontal velocity -> bank angle.
   const lean = useMotionValue(0)
   const tilt = useSpring(lean, { stiffness: 180, damping: 18, mass: 0.4 })
-  const rotate = useTransform(tilt, (v) => `${v}deg`)
+  /**
+   * Rest angle. Tipping the roof anticlockwise puts its apex up-and-left,
+   * which is the orientation the eye expects from a pointer - it stops reading
+   * as a floating chevron and starts reading as a cursor.
+   */
+  const REST_ANGLE = -20
+  const rotate = useTransform(tilt, (v) => `${REST_ANGLE + v}deg`)
   const lastX = useRef(0)
   const settle = useRef(0)
 

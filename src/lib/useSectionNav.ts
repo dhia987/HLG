@@ -3,7 +3,7 @@ import { nav } from '../data/site'
 import { useSmoothScroll } from './SmoothScroll'
 
 /** Height of the fixed header, so anchored sections land clear of it. */
-export const HEADER_OFFSET = -88
+export const HEADER_OFFSET = -96
 
 /**
  * Scroll-spy + anchored navigation for the single-page layout.

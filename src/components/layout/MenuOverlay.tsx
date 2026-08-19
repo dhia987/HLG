@@ -74,8 +74,11 @@ export function MenuOverlay({
             <div className="absolute inset-0 bg-gradient-to-t from-[#1C1C1E] via-transparent to-transparent" />
           </div>
 
-          <div className="shell relative flex flex-1 flex-col justify-center pb-16 pt-28">
-            <nav className="lg:max-w-[62%]">
+          {/* `my-auto` centres the block when it fits and lets it scroll when it
+              does not - ten items plus the contact grid overflow a short phone. */}
+          <div className="relative flex flex-1 flex-col overflow-y-auto overscroll-contain">
+            <div className="shell my-auto w-full pb-14 pt-28">
+              <nav className="lg:max-w-[62%]">
               <ul>
                 {nav.map((item, i) => {
                   const isActive = current === item.id
@@ -93,7 +96,7 @@ export function MenuOverlay({
                       <button
                         onClick={() => onNavigate(item.id)}
                         data-cursor="link"
-                        className="group flex w-full items-baseline gap-5 py-[clamp(0.35rem,1.15vh,1rem)] text-left md:gap-10"
+                        className="group flex w-full items-baseline gap-5 py-[clamp(0.2rem,0.75vh,0.7rem)] text-left md:gap-10"
                       >
                         <span className="eyebrow w-8 shrink-0 text-[#B88D5B]/70">
                           {item.index}
@@ -159,7 +162,8 @@ export function MenuOverlay({
                   ))}
                 </ul>
               </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
 
           <motion.div
@@ -167,7 +171,7 @@ export function MenuOverlay({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
-            className="shell relative flex items-center justify-between border-t hairline py-6"
+            className="shell relative flex shrink-0 items-center justify-between border-t hairline py-6"
           >
             <div className="flex items-center gap-3">
               <Monogram variant="white" className="h-6 w-6" />
