@@ -3,39 +3,49 @@ import { Marquee } from '../ui/Marquee'
 import { CTA } from '../ui/Button'
 import { MaskText } from '../ui/Reveal'
 import { Magnetic } from '../ui/Magnetic'
+import { launchLine, launchStatus } from '../ui/Countdown'
 import { SocialIcon } from './SocialIcons'
 import { site } from '../../data/site'
-import { communities, propertyTypes } from '../../data/properties'
-import { developers } from '../../data/developers'
 import { useSmoothScroll } from '../../lib/SmoothScroll'
 import { useSectionNav } from '../../lib/useSectionNav'
-import { useSearch } from '../../lib/SearchContext'
+import { INTERESTS, useInterest } from '../../lib/InterestContext'
 
-/** Six of twelve — the ones HLG actually leads with. */
-const FOOTER_COMMUNITIES = [
-  'Palm Jumeirah',
-  'Downtown Dubai',
-  'Emirates Hills',
-  'Dubai Marina',
-  'Business Bay',
-  'Dubai Creek Harbour',
+/**
+ * Deep links into the About narrative. None of these are nav entries, which is
+ * the point: the footer is a directory of destinations the navbar does not
+ * already hold, not a second copy of it. The ids live on the sub-blocks of
+ * AboutSection.
+ */
+const HOUSE = [
+  { label: 'Our story', id: 'story' },
+  { label: 'Vision & mission', id: 'vision' },
+  { label: 'CEO & founder', id: 'founder' },
+  { label: 'Why Dubai', id: 'dubai' },
 ]
 
-const FOOTER_TYPES = ['Apartment', 'Villa', 'Penthouse', 'Townhouse', 'Duplex', 'Loft']
-
-/** Duplex -> Duplexes, not Duplexs. */
-const plural = (t: string) => (/(x|s|ch|sh)$/i.test(t) ? t + 'es' : t + 's')
+/** The form's options read as verbs; under "Register as" they need to be nouns. */
+const REGISTER_AS: Record<(typeof INTERESTS)[number], string> = {
+  Buying: 'A buyer',
+  Selling: 'A seller',
+  Renting: 'A tenant',
+  Partnering: 'A partner or developer',
+}
 
 export function Footer() {
   const { scrollTo } = useSmoothScroll()
   const { goTo } = useSectionNav()
-  const { applyFilter } = useSearch()
+  const { setInterest } = useInterest()
   const year = new Date().getFullYear()
 
-  /** Footer links are shortcuts into the portfolio, not a second navigation. */
-  const filterTo = (partial: Parameters<typeof applyFilter>[0]) => {
-    applyFilter(partial)
-    goTo('properties')
+  /**
+   * The portfolio shortcuts used to carry a filter into the grid. With no
+   * portfolio the same idea has one destination left, so what a shortcut
+   * carries now is the registration type - the visitor still arrives at
+   * something already set up for them rather than at a blank form.
+   */
+  const registerAs = (interest: (typeof INTERESTS)[number]) => {
+    setInterest(interest)
+    goTo('contact')
   }
 
   const linkCls =
@@ -48,7 +58,7 @@ export function Footer() {
         <div className="chevron-field pointer-events-none absolute inset-0 opacity-30" />
         <div className="relative grid gap-12 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
           <div>
-            <p className="eyebrow mb-7 text-[#B88D5B]">Start here</p>
+            <p className="eyebrow mb-7 text-[#B88D5B]">Before we open</p>
             <h2 className="display-lg">
               <MaskText
                 lines={['Let us open', <span className="text-bronze-grad">the right door.</span>]}
@@ -57,11 +67,11 @@ export function Footer() {
           </div>
           <div className="flex flex-col items-start gap-6 lg:items-end">
             <p className="body-lg max-w-sm text-[#F5F3EF]/55 lg:text-right">
-              Tell us what you are looking for. We will tell you honestly whether it exists,
-              what it costs, and when to move.
+              Tell us what you are looking for. When the doors open you will hear from us before
+              anything else does.
             </p>
             <CTA onClick={() => goTo('contact')} tone="bronze">
-              Book a consultation
+              Register your interest
             </CTA>
           </div>
         </div>
@@ -81,92 +91,68 @@ export function Footer() {
         </Marquee>
       </div>
 
-      {/* directory — shortcuts into the portfolio, not a copy of the navbar */}
-      <div className="shell grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.5fr_repeat(4,1fr)] lg:gap-10">
+      {/* directory — real destinations, not a second copy of the navbar */}
+      <div className="shell grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.6fr_repeat(3,1fr)] lg:gap-10">
         <div className="lg:pr-8">
           <Logo variant="white" className="mb-7 h-12 w-auto" />
           <p className="body-base max-w-xs text-[#F5F3EF]/50">
-            {site.legalName}. A {site.city} real estate house for buying, selling, renting and
-            holding property with intent.
+            {site.legalName}. A {site.city} real estate house opening for people who intend to
+            live with their decision rather than trade out of it.
           </p>
+          <div className="mt-7 inline-flex flex-col gap-1.5 border-l-2 border-[#9C6625] pl-4">
+            <span className="eyebrow text-[#B88D5B]">Doors open</span>
+            <span className="brand-type text-sm text-[#F5F3EF]/70">
+              {launchLine(launchStatus())}
+            </span>
+          </div>
         </div>
 
         <div>
-          <p className="eyebrow mb-6 text-[#B88D5B]">Communities</p>
+          <p className="eyebrow mb-6 text-[#B88D5B]">The house</p>
           <ul className="space-y-3">
-            {FOOTER_COMMUNITIES.filter((c) => communities.includes(c)).map((c) => (
-              <li key={c}>
-                <button
-                  onClick={() => filterTo({ community: c })}
-                  data-cursor="link"
-                  className={linkCls}
-                >
-                  {c}
+            {HOUSE.map((h) => (
+              <li key={h.id}>
+                <button onClick={() => goTo(h.id)} data-cursor="link" className={linkCls}>
+                  {h.label}
                 </button>
               </li>
             ))}
             <li>
               <button
-                onClick={() => filterTo({})}
+                onClick={() => goTo('value')}
                 data-cursor="link"
                 className={`${linkCls} text-[#B88D5B]/80`}
               >
-                All communities
+                Our commitments
               </button>
             </li>
           </ul>
         </div>
 
         <div>
-          <p className="eyebrow mb-6 text-[#B88D5B]">Property types</p>
+          <p className="eyebrow mb-6 text-[#B88D5B]">Register as</p>
           <ul className="space-y-3">
-            {FOOTER_TYPES.filter((t) => propertyTypes.includes(t)).map((t) => (
-              <li key={t}>
-                <button onClick={() => filterTo({ type: t })} data-cursor="link" className={linkCls}>
-                  {plural(t)}
+            {INTERESTS.map((it) => (
+              <li key={it}>
+                <button onClick={() => registerAs(it)} data-cursor="link" className={linkCls}>
+                  {REGISTER_AS[it]}
                 </button>
               </li>
             ))}
             <li>
               <button
-                onClick={() => filterTo({ listing: 'rent' })}
-                data-cursor="link"
-                className={linkCls}
-              >
-                To rent
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <p className="eyebrow mb-6 text-[#B88D5B]">Developers</p>
-          <ul className="space-y-3">
-            {developers.slice(0, 6).map((d) => (
-              <li key={d.id}>
-                <button
-                  onClick={() => goTo('developers')}
-                  data-cursor="link"
-                  className={linkCls}
-                >
-                  {d.name}
-                </button>
-              </li>
-            ))}
-            <li>
-              <button
-                onClick={() => goTo('developers')}
+                onClick={() => goTo('contact')}
                 data-cursor="link"
                 className={`${linkCls} text-[#B88D5B]/80`}
               >
-                All developers
+                Join the list
               </button>
             </li>
           </ul>
         </div>
 
         <div>
-          <p className="eyebrow mb-6 text-[#B88D5B]">Contact</p>
+          <p className="eyebrow mb-6 text-[#B88D5B]">Find us</p>
           <ul className="space-y-4">
             <li>
               <a

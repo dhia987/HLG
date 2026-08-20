@@ -15,40 +15,7 @@ import { useSectionNav } from '../../lib/useSectionNav'
 const founderProfile = team[0]
 
 const STATEMENT =
-  'HLG is Home & Leisure Group. We buy, sell and let property in Dubai for people who intend to live with their decision - not trade out of it by Friday. Fewer listings, longer conversations, better outcomes.'
-
-const REASONS = [
-  {
-    k: '01',
-    t: 'Judgement over inventory',
-    d: 'We are paid for the deals we talk you out of as much as the ones we close. If the numbers do not work, we say so and wait.',
-  },
-  {
-    k: '02',
-    t: 'Discretion as standard',
-    d: 'Off-market means off-market. Names, prices and intentions stay inside the room until you decide otherwise.',
-  },
-  {
-    k: '03',
-    t: 'One point of contact',
-    d: 'The advisor who takes your first call takes your last one. No handover to a desk that has not met you.',
-  },
-  {
-    k: '04',
-    t: 'Long after the keys',
-    d: 'Handover is the middle of the relationship, not the end. Management, re-lets and eventual exit are part of the same conversation.',
-  },
-  {
-    k: '05',
-    t: 'Access before the portals',
-    d: 'Developer allocations and private instructions reach us first. A meaningful share of what we transact is never publicly listed at all.',
-  },
-  {
-    k: '06',
-    t: 'One team, end to end',
-    d: 'Search, negotiation, DLD transfer, mortgage introduction, snagging, tenancy. You are not handed to a different company at every stage.',
-  },
-]
+  'HLG is Home & Leisure Group. We are opening a Dubai real estate house for people who intend to live with their decision - not trade out of it by Friday. Fewer listings, longer conversations, better outcomes.'
 
 const DUBAI = [
   {
@@ -64,7 +31,7 @@ const DUBAI = [
   {
     k: '03',
     t: 'Residency by investment',
-    d: 'Qualifying property unlocks a ten-year Golden Visa for you and your family. We handle the pathway.',
+    d: 'Qualifying property unlocks a ten-year Golden Visa for you and your family. We will handle the pathway.',
   },
   {
     k: '04',
@@ -91,6 +58,20 @@ function Word({
   )
 }
 
+/**
+ * The house, before it opens.
+ *
+ * Every claim here is either about the founder, about Dubai, or about what
+ * HLG intends to do - never about what it has already done. The "why choose
+ * HLG" block that used to close this section has moved out to its own
+ * anchored section, because it and the value proposition were the same
+ * argument told twice.
+ *
+ * The sub-blocks carry their own ids so the footer can point at them. They are
+ * deliberately not in `nav`: the scroll spy only reads nav entries, so extra
+ * ids are free, and a footer full of destinations the navbar does not already
+ * hold is the whole point of a directory.
+ */
 export function AboutSection() {
   const statementRef = useRef<HTMLDivElement>(null)
   const { goTo } = useSectionNav()
@@ -138,7 +119,10 @@ export function AboutSection() {
       </div>
 
       {/* --- vision & mission ------------------------------------------------ */}
-      <div className="relative overflow-hidden border-b hairline bg-[#131315] section-y">
+      <div
+        id="vision"
+        className="relative scroll-mt-24 overflow-hidden border-b hairline bg-[#131315] section-y"
+      >
         <div className="chevron-field pointer-events-none absolute inset-0 opacity-30" />
         <div className="shell relative">
           <ul className="grid gap-px overflow-hidden border hairline md:grid-cols-2">
@@ -173,7 +157,7 @@ export function AboutSection() {
       </div>
 
       {/* --- story ---------------------------------------------------------- */}
-      <div className="border-b hairline section-y">
+      <div id="story" className="scroll-mt-24 border-b hairline section-y">
         <div className="shell grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
           <div className="relative">
             <ParallaxImage
@@ -200,14 +184,14 @@ export function AboutSection() {
             <div className="mt-9 space-y-6">
               <Reveal>
                 <p className="body-lg text-[#F5F3EF]/70">
-                  Anyone can answer the first question &mdash; what is available. HLG exists for
-                  the second one: whether it is right, at this price, in this community, for the
-                  life you actually intend to live here.
+                  Anyone can answer the first question &mdash; what is available. HLG is being
+                  built for the second one: whether it is right, at this price, in this community,
+                  for the life you actually intend to live here.
                 </p>
               </Reveal>
               <Reveal delay={1}>
                 <p className="body-base text-[#F5F3EF]/55">
-                  We started because too much of the Dubai market is organised around volume.
+                  We are starting because too much of the Dubai market is organised around volume.
                   Listings pushed, viewings stacked, contracts rushed. It works, briefly, for the
                   agent. It rarely works for the buyer three years later, when the community has
                   matured differently to the brochure and the service charge has doubled.
@@ -215,14 +199,15 @@ export function AboutSection() {
               </Reveal>
               <Reveal delay={2}>
                 <p className="body-base text-[#F5F3EF]/55">
-                  So we built the opposite. A small team, a limited number of mandates, and a
-                  standard of advice measured by whether clients come back.
+                  So we are building the opposite. A small team, a deliberately short list of
+                  mandates, and a standard of advice we would rather be judged on than a volume
+                  figure. That is what opens with us on day one.
                 </p>
               </Reveal>
               <Reveal delay={3}>
                 <div className="pt-4">
                   <CTA onClick={() => goTo('contact')} tone="ghost">
-                    Start a conversation
+                    Register your interest
                   </CTA>
                 </div>
               </Reveal>
@@ -232,7 +217,10 @@ export function AboutSection() {
       </div>
 
       {/* --- founder ---------------------------------------------------------- */}
-      <div className="relative overflow-hidden border-b hairline section-y">
+      <div
+        id="founder"
+        className="relative scroll-mt-24 overflow-hidden border-b hairline section-y"
+      >
         <Drift
           distance={50}
           className="pointer-events-none absolute -right-[8vw] top-1/2 hidden -translate-y-1/2 lg:block"
@@ -278,16 +266,16 @@ export function AboutSection() {
               </Reveal>
               <Reveal delay={1}>
                 <p className="body-base text-[#F5F3EF]/55">
-                  &ldquo;HLG exists to close that gap. We keep the bench small so every mandate
-                  has a named owner, and we turn work away when the numbers do not hold. That is
-                  a slower way to build a brokerage. It is the only way I would want one built
-                  if the money were my own.&rdquo;
+                  &ldquo;HLG is being built to close that gap. We are keeping the bench small so
+                  every mandate has a named owner, and we will turn work away when the numbers do
+                  not hold. That is a slower way to build a brokerage. It is the only way I would
+                  want one built if the money were my own.&rdquo;
                 </p>
               </Reveal>
               <Reveal delay={2}>
                 <p className="body-base text-[#F5F3EF]/55">
-                  &ldquo;If you are considering Dubai, ask us the awkward questions. The answers
-                  are the whole product.&rdquo;
+                  &ldquo;We are not open yet, which makes this the best moment to ask us the
+                  awkward questions. The answers are the whole product.&rdquo;
                 </p>
               </Reveal>
 
@@ -315,47 +303,11 @@ export function AboutSection() {
         </div>
       </div>
 
-      {/* --- how we work ----------------------------------------------------- */}
-      <div className="relative overflow-hidden border-b hairline bg-[#131315] section-y">
-        <div className="chevron-field pointer-events-none absolute inset-0 opacity-30" />
-        <div className="shell relative">
-          <SectionHeading
-            eyebrow="Why choose HLG"
-            lines={['Six reasons', <span className="text-bronze-grad">clients stay.</span>]}
-            aside={
-              <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
-                Ninety-seven percent of our business is repeat or referred. These are the
-                reasons people give when we ask them why.
-              </p>
-            }
-          />
-          <ul className="mt-16 grid gap-x-14 gap-y-4 md:grid-cols-2">
-            {REASONS.map((v, i) => (
-              <motion.li
-                key={v.k}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={inView}
-                transition={{ duration: 0.8, ease: EASE, delay: (i % 2) * 0.12 }}
-                className="group border-b hairline py-8"
-              >
-                <div className="flex gap-6 md:gap-9">
-                  <span className="eyebrow pt-2 text-[#9C6625]">{v.k}</span>
-                  <div>
-                    <h3 className="display-sm mb-3 transition-colors duration-500 group-hover:text-[#B88D5B]">
-                      {v.t}
-                    </h3>
-                    <p className="body-base text-[#F5F3EF]/55">{v.d}</p>
-                  </div>
-                </div>
-              </motion.li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
       {/* --- why Dubai -------------------------------------------------------- */}
-      <div className="relative overflow-hidden border-b hairline section-y">
+      <div
+        id="dubai"
+        className="relative scroll-mt-24 overflow-hidden border-b hairline section-y"
+      >
         <div className="shell">
           <SectionHeading
             eyebrow="Why Dubai"
@@ -363,7 +315,7 @@ export function AboutSection() {
             aside={
               <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
                 Dubai stopped being a bet some time ago. What remains is a question of where,
-                when and with whom &mdash; which is precisely the part we are paid to answer.
+                when and with whom &mdash; which is precisely the part we intend to answer.
               </p>
             }
           />
@@ -435,7 +387,7 @@ export function AboutSection() {
           <div className="absolute inset-0 flex items-center">
             <div className="shell">
               <h2 className="display-lg max-w-[14ch]">
-                <MaskText lines={['We only sell what', 'we would live in.']} />
+                <MaskText lines={['We will only sell', 'what we would live in.']} />
               </h2>
             </div>
           </div>

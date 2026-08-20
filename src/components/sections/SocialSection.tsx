@@ -5,16 +5,22 @@ import { img } from '../../data/images'
 import { SectionHeading } from './SectionHeading'
 import { Marquee } from '../ui/Marquee'
 
-/** PLACEHOLDER FEED - swap for the live social feed or a curated grid. */
+/**
+ * PLACEHOLDER FEED - swap for the live social feed or a curated grid.
+ *
+ * Captions deliberately carry no transactions. A house that has not opened has
+ * no handover days and no listings to style, so the feed is the city and the
+ * build-up to opening instead.
+ */
 const TILES = [
-  { img: img.villaDusk, cap: 'Handover day, Palm Jumeirah' },
-  { img: img.cityDawn, cap: 'Downtown, from the 62nd' },
-  { img: img.livingWarm, cap: 'Styling a listing' },
-  { img: img.cityNight, cap: 'Market notes, Q3' },
+  { img: img.villaDusk, cap: 'Palm Jumeirah, last light' },
+  { img: img.cityDawn, cap: 'Downtown at first light' },
+  { img: img.livingWarm, cap: 'The room where it starts' },
+  { img: img.cityNight, cap: 'Sheikh Zayed Road, midweek' },
   { img: img.resortPool, cap: 'District One lagoon' },
-  { img: img.coastAerial, cap: 'The coast, blue hour' },
-  { img: img.interiorPoolView, cap: 'Inside a Bluewaters two-bed' },
-  { img: img.villaPalms, cap: 'Ranches, Saturday morning' },
+  { img: img.coastAerial, cap: 'The coast, from the air' },
+  { img: img.interiorPoolView, cap: 'Bluewaters, looking out' },
+  { img: img.villaPalms, cap: 'Ranches, early' },
 ]
 
 export function SocialSection() {
@@ -27,7 +33,8 @@ export function SocialSection() {
           aside={
             <div className="lg:pb-3">
               <p className="body-lg mb-7 text-[#F5F3EF]/60">
-                New listings, handovers and honest market notes &mdash; posted as they happen.
+                The city, the build-up and honest market notes &mdash; posted as they happen.
+                Everything else waits until the doors open.
               </p>
               <ul className="flex flex-wrap gap-3">
                 {site.social.map((s, i) => (

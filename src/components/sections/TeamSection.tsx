@@ -20,9 +20,9 @@ export function TeamSection() {
             lines={['People, not', <span className="text-bronze-grad">a call centre.</span>]}
             aside={
               <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
-                Six advisors, each owning a side of the market. No pooled leads, no call centre,
-                no handing you down the chain &mdash; the advisor who takes your first call takes
-                your last one.
+                Six advisors, each owning a side of the market. They are in place before the
+                doors are, which is rather the point &mdash; no pooled leads, no call centre, and
+                nobody hired in a hurry once the phone starts ringing.
               </p>
             }
           />
@@ -95,7 +95,7 @@ export function TeamSection() {
               <span className="text-bronze-grad">more of the right people.</span>,
             ]}
             align="center"
-            lead="We hire slowly and rarely. If you sell by advising rather than by pushing, we would like to hear from you."
+            lead="We are hiring slowly and rarely, even now. If you sell by advising rather than by pushing, we would rather hear from you before we open than after."
           />
           <div className="mt-12 flex justify-center">
             <CTA href={`mailto:${site.adminEmail}?subject=Careers%20at%20HLG`} tone="bronze">

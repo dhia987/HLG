@@ -7,6 +7,7 @@ import { site } from '../../data/site'
 import { img, wide } from '../../data/images'
 import { CTA } from '../ui/Button'
 import { MaskWords } from '../ui/Reveal'
+import { LaunchMarker } from '../ui/Countdown'
 import { Magnetic } from '../ui/Magnetic'
 
 const FRAMES = [
@@ -21,6 +22,11 @@ const FRAMES = [
  * tagline, each frame easing out of an over-scale across six seconds - long
  * enough to read as film rather than as a slideshow. The brand mark lives in
  * the header rather than here, so the type carries the opening on its own.
+ *
+ * The tagline is doing double duty now. "The Key to Your Next Chapter" was
+ * always the brand line; before opening it is also the literal position - the
+ * chapter has not started. The launch marker beside it is the only thing on
+ * the page that has to say so out loud, which is why nothing else does.
  */
 export function Hero({ ready }: { ready: boolean }) {
   const ref = useRef<HTMLElement>(null)
@@ -42,11 +48,22 @@ export function Hero({ ready }: { ready: boolean }) {
   // Copy waits for the intro curtain so the two never animate over each other.
   const d = ready ? 0.1 : 0.45
 
+  // The masthead is sized with `min-h`, not a fixed `h`. It is still exactly
+  // one viewport tall everywhere the content fits - but the launch marker made
+  // the content block tall enough to overrun a short phone, and with
+  // `overflow-hidden` above it a fixed height silently ate the eyebrow and the
+  // top of the headline at 390x640. Letting it grow is the only failure mode
+  // that costs nothing.
+  //
+  // The top padding goes with it. `justify-end` pins the content to the bottom
+  // whenever there is room, so the inset costs nothing at normal heights - but
+  // once the section grows, it is what keeps the eyebrow out from under the
+  // fixed header.
   return (
     <section
       id="home"
       ref={ref}
-      className="noise relative flex h-[100svh] min-h-[640px] flex-col justify-end overflow-hidden"
+      className="noise relative flex min-h-[100svh] flex-col justify-end overflow-hidden pt-[9.5rem]"
     >
       {/* cinematic backplate */}
       <motion.div className="absolute inset-0" style={reduced ? undefined : { y: bgY }}>
@@ -71,21 +88,28 @@ export function Hero({ ready }: { ready: boolean }) {
       <div className="absolute inset-0 bg-gradient-to-r from-[#1C1C1E]/75 via-[#1C1C1E]/15 to-transparent" />
 
       <motion.div
-        className="shell relative pb-14 md:pb-16"
+        className="shell relative pb-12 md:pb-16"
         style={reduced ? undefined : { y: contentY, opacity: contentFade }}
       >
-        <motion.p
+        {/* The badge borrows the header's active-nav pill so it reads as part
+            of the system rather than as a sticker dropped on the artwork. It
+            says the thing once; the eyebrow beside it stays factual and the
+            countdown below carries the detail. */}
+        <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: EASE, delay: d }}
-          className="eyebrow mb-8 flex flex-wrap items-center gap-3 text-[#B88D5B]"
+          className="mb-7 flex flex-wrap items-center gap-x-5 gap-y-3 md:mb-8"
         >
-          <span className="h-1.5 w-1.5 rotate-45 bg-[#9C6625]" />
-          {site.city}
-          <span className="text-[#F5F3EF]/25">/</span> Buy
-          <span className="text-[#F5F3EF]/25">/</span> Sell
-          <span className="text-[#F5F3EF]/25">/</span> Rent
-        </motion.p>
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-[#9C6625]/45 bg-[#9C6625]/15 px-4 py-2 text-[0.7rem] font-medium uppercase leading-none tracking-[0.22em] text-[#B88D5B]">
+            <span className="h-1.5 w-1.5 rotate-45 bg-[#9C6625]" />
+            Coming soon
+          </span>
+          <p className="eyebrow flex flex-wrap items-center gap-3 text-[#F5F3EF]/55">
+            {site.city}
+            <span className="text-[#F5F3EF]/25">/</span> Real Estate
+          </p>
+        </motion.div>
 
         <h1 className="display-xl max-w-[15ch]">
           <MaskWords text="The Key to Your" playOnMount delay={d + 0.16} />
@@ -98,29 +122,40 @@ export function Hero({ ready }: { ready: boolean }) {
           />
         </h1>
 
-        <div className="mt-10 flex flex-col gap-9 lg:flex-row lg:items-end lg:justify-between">
-          <motion.p
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: EASE, delay: d + 0.65 }}
-            className="body-lg max-w-md text-[#F5F3EF]/70"
-          >
-            A {site.city} real estate house for buying, selling and renting exceptional
-            property &mdash; built on judgement, discretion and long relationships.
-          </motion.p>
+        <div className="mt-9 grid gap-8 md:mt-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE, delay: d + 0.65 }}
+              className="body-lg max-w-md text-[#F5F3EF]/70"
+            >
+              A {site.city} real estate house built on judgement, discretion and long
+              relationships. The chapter has not started yet &mdash; be on the list when it does.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE, delay: d + 0.75 }}
+              className="mt-7 flex flex-wrap items-center gap-4"
+            >
+              <CTA onClick={() => goTo('contact')} tone="bronze">
+                Register your interest
+              </CTA>
+              <CTA onClick={() => goTo('about')} tone="ghost" magnetic={false}>
+                Inside HLG
+              </CTA>
+            </motion.div>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: EASE, delay: d + 0.75 }}
-            className="flex flex-wrap items-center gap-4"
+            transition={{ duration: 1, ease: EASE, delay: d + 0.85 }}
+            className="w-full lg:w-[24rem]"
           >
-            <CTA onClick={() => goTo('properties')} tone="bronze">
-              Explore properties
-            </CTA>
-            <CTA onClick={() => goTo('contact')} tone="ghost" magnetic={false}>
-              Speak to an advisor
-            </CTA>
+            <LaunchMarker />
           </motion.div>
         </div>
       </motion.div>

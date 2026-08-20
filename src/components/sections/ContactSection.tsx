@@ -4,21 +4,29 @@ import { EASE, inView } from '../../lib/motion'
 import { site } from '../../data/site'
 import { CTA } from '../ui/Button'
 import { Monogram } from '../brand/Monogram'
+import { launchLine, launchStatus } from '../ui/Countdown'
 import { SectionHeading } from './SectionHeading'
-import { useSearch } from '../../lib/SearchContext'
+import { INTERESTS, useInterest } from '../../lib/InterestContext'
 
 type Status = 'idle' | 'sending' | 'sent'
-
-const INTENTS = ['Buy', 'Sell', 'Rent'] as const
 
 const fieldCls =
   'peer w-full border-0 border-b hairline bg-transparent pb-3 pt-6 text-base font-light text-[#F5F3EF] outline-none transition-colors duration-500 placeholder:text-transparent focus:border-[#9C6625]'
 const labelCls =
   'pointer-events-none absolute left-0 top-6 origin-left text-sm font-light text-[#F5F3EF]/40 transition-all duration-500 peer-focus:top-0 peer-focus:text-[0.65rem] peer-focus:uppercase peer-focus:tracking-[0.2em] peer-focus:text-[#B88D5B] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[0.65rem] peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-[0.2em] peer-[:not(:placeholder-shown)]:text-[#B88D5B]'
 
+/**
+ * Not an enquiry form - an early-access list.
+ *
+ * Before opening there is nothing to enquire about, so the form asks for less
+ * and promises something specific in return: a place on the list and a named
+ * advisor when the doors open. The message field is optional on purpose; a
+ * required paragraph is the wrong toll to charge someone who only wants to put
+ * their name down.
+ */
 export function ContactSection() {
-  // Selecting a desk upstairs pre-selects the matching enquiry type here.
-  const { contactIntent, setContactIntent } = useSearch()
+  // The footer's shortcuts arrive here with the right option already chosen.
+  const { interest, setInterest } = useInterest()
   const [status, setStatus] = useState<Status>('idle')
 
   /**
@@ -38,12 +46,13 @@ export function ContactSection() {
     <section id="contact" className="scroll-mt-24 border-b hairline section-y">
       <div className="shell">
         <SectionHeading
-          eyebrow="Contact"
-          lines={['Let us', <span className="text-bronze-grad">begin.</span>]}
+          eyebrow="Register your interest"
+          lines={['Be on the list', <span className="text-bronze-grad">before we open.</span>]}
           aside={
             <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
-              Tell us what you are trying to do. You will hear from a named advisor, usually the
-              same day.
+              We are opening with a list rather than an inbox. Tell us what you are looking for
+              and you will hear from a named advisor &mdash; not a newsletter &mdash; when the
+              doors open.
             </p>
           }
         />
@@ -62,13 +71,14 @@ export function ContactSection() {
                   className="border hairline bg-[#131315] p-10 md:p-14"
                 >
                   <Monogram variant="white" animated className="mb-8 h-14 w-14" />
-                  <h3 className="display-md mb-5">Received.</h3>
+                  <h3 className="display-md mb-5">You are on the list.</h3>
                   <p className="body-lg mb-9 max-w-md text-[#F5F3EF]/60">
-                    Thank you &mdash; your enquiry is with us. An advisor will come back to you
-                    personally, usually within a few hours during Dubai business hours.
+                    Thank you &mdash; your name is down. We will be in touch before we open, and a
+                    named advisor will pick up your brief from there. Nothing else lands in your
+                    inbox in the meantime.
                   </p>
                   <CTA onClick={() => setStatus('idle')} tone="ghost" magnetic={false}>
-                    Send another
+                    Register someone else
                   </CTA>
                 </motion.div>
               ) : (
@@ -83,17 +93,17 @@ export function ContactSection() {
                   className="space-y-10"
                 >
                   <fieldset>
-                    <legend className="eyebrow mb-5 text-[#F5F3EF]/40">I am looking to</legend>
+                    <legend className="eyebrow mb-5 text-[#F5F3EF]/40">I am interested in</legend>
                     <div className="flex flex-wrap gap-2.5">
-                      {INTENTS.map((it) => (
+                      {INTERESTS.map((it) => (
                         <button
                           key={it}
                           type="button"
-                          onClick={() => setContactIntent(it)}
+                          onClick={() => setInterest(it)}
                           data-cursor="link"
-                          aria-pressed={contactIntent === it}
+                          aria-pressed={interest === it}
                           className={`relative overflow-hidden rounded-full border px-6 py-3 text-[0.7rem] font-medium uppercase tracking-[0.18em] transition-colors duration-500 ${
-                            contactIntent === it
+                            interest === it
                               ? 'border-[#9C6625] bg-[#9C6625] text-[#F5F3EF]'
                               : 'hairline text-[#F5F3EF]/60 hover:border-[#9C6625]'
                           }`}
@@ -131,9 +141,9 @@ export function ContactSection() {
                       </label>
                     </div>
                     <div className="relative">
-                      <input id="budget" name="budget" placeholder="Budget" className={fieldCls} />
-                      <label htmlFor="budget" className={labelCls}>
-                        Budget (optional)
+                      <input id="area" name="area" placeholder="Area" className={fieldCls} />
+                      <label htmlFor="area" className={labelCls}>
+                        Area of interest (optional)
                       </label>
                     </div>
                   </div>
@@ -142,23 +152,22 @@ export function ContactSection() {
                     <textarea
                       id="message"
                       name="message"
-                      required
                       rows={4}
                       placeholder="Message"
                       className={`${fieldCls} resize-none`}
                     />
                     <label htmlFor="message" className={labelCls}>
-                      Tell us about the brief
+                      Anything we should know (optional)
                     </label>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-6 pt-2">
                     <CTA type="submit" tone="bronze" magnetic={false}>
-                      {status === 'sending' ? 'Sending' : 'Send enquiry'}
+                      {status === 'sending' ? 'Registering' : 'Register interest'}
                     </CTA>
                     <p className="max-w-xs text-[0.72rem] font-light leading-relaxed text-[#F5F3EF]/35">
-                      We reply to every enquiry personally. Your details are never shared with a
-                      third party.
+                      One message before we open, and a named advisor after. Your details are
+                      never shared with a third party.
                     </p>
                   </div>
                 </motion.form>
@@ -207,12 +216,17 @@ export function ContactSection() {
                     </a>
                   </dd>
                 </div>
+                {/* Publishing office hours for a house that has not opened would
+                    be the one false note on the page. The opening is the fact
+                    that belongs here instead. */}
                 <div>
-                  <dt className="eyebrow mb-3 text-[#B88D5B]">Hours</dt>
+                  <dt className="eyebrow mb-3 text-[#B88D5B]">Doors open</dt>
                   <dd className="body-base text-[#F5F3EF]/75">
-                    Sunday &ndash; Thursday, 9:00 &ndash; 19:00 GST
+                    {launchLine(launchStatus())}
                     <br />
-                    Saturday by appointment
+                    <span className="text-[#F5F3EF]/45">
+                      Registrations are read daily until then.
+                    </span>
                   </dd>
                 </div>
               </dl>

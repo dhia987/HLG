@@ -35,23 +35,56 @@ export const site = {
   ],
 } as const
 
+export type Launch = {
+  /**
+   * The exact opening moment as an ISO 8601 string *with the Gulf offset*.
+   * `null` while the date is unannounced.
+   */
+  date: string | null
+  /** The same moment written for reading, e.g. '14 March 2027 - 10:00 GST'. */
+  label: string | null
+}
+
+/**
+ * The opening. This is the only place the date lives - the hero countdown, the
+ * contact card and the footer plate all read it, so changing it here moves
+ * every marker on the site at once.
+ *
+ * The `+04:00` offset is not decoration: the countdown is computed against
+ * real Gulf time, so a visitor in London sees the same number of days as one
+ * in Dubai. Once the moment passes, every marker switches itself to its
+ * "open" state without a deploy.
+ *
+ * TIME OF DAY IS AN ASSUMPTION. The date was given as 15/09/2026; 10:00 is a
+ * stand-in for the hour the doors actually open. Change the `10:00:00` below
+ * and the matching label if it should be another time.
+ *
+ * Setting `date` back to null returns every marker to its unannounced state -
+ * same layout, numerals as dashes, caption reading "Date to be announced".
+ */
+export const launch: Launch = {
+  date: '2026-09-15T10:00:00+04:00',
+  label: '15 September 2026 - 10:00 GST',
+}
+
 /**
  * The site is a single scroll narrative - every nav entry is a section on the
  * page, not a route. `id` is both the DOM id and the hash used for deep links.
  * `short` is what the header shows; the menu overlay and footer use `label`,
  * where there is room for the fuller wording.
+ *
+ * Pre-launch structure: the portfolio, the three desks, the developer index
+ * and the journal all belong to a house that is trading. None of them exist
+ * yet, so the narrative is who we are, what we are committing to, who is
+ * behind it, where to find us, and how to get on the list.
  */
 export const nav = [
   { label: 'Home', short: 'Home', id: 'home', index: '01' },
   { label: 'About Us', short: 'About', id: 'about', index: '02' },
-  { label: 'Buy', short: 'Buy', id: 'buy', index: '03' },
-  { label: 'Sell', short: 'Sell', id: 'sell', index: '04' },
-  { label: 'Rent', short: 'Rent', id: 'rent', index: '05' },
-  { label: 'Properties', short: 'Properties', id: 'properties', index: '06' },
-  { label: 'Developers', short: 'Developers', id: 'developers', index: '07' },
-  { label: 'Blog', short: 'Blog', id: 'blog', index: '08' },
-  { label: 'Our Team', short: 'Team', id: 'team', index: '09' },
-  { label: 'Contact', short: 'Contact', id: 'contact', index: '10' },
+  { label: 'Why HLG', short: 'Why HLG', id: 'value', index: '03' },
+  { label: 'Our Team', short: 'Team', id: 'team', index: '04' },
+  { label: 'Location', short: 'Location', id: 'location', index: '05' },
+  { label: 'Contact', short: 'Contact', id: 'contact', index: '06' },
 ] as const
 
 export type NavItem = (typeof nav)[number]

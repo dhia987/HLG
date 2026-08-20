@@ -4,6 +4,7 @@ import { EASE, inView } from '../../lib/motion'
 import { site } from '../../data/site'
 import { SectionHeading } from './SectionHeading'
 import { CTA } from '../ui/Button'
+import { launchLine, launchStatus } from '../ui/Countdown'
 
 const { lat, lng } = site.geo
 const SPAN = 0.012
@@ -32,8 +33,8 @@ export function LocationSection() {
           lines={['Business Bay,', <span className="text-bronze-grad">Dubai.</span>]}
           aside={
             <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
-              The office is a five-minute drive from Downtown and ten from the Marina road.
-              Viewings usually start here with coffee and a map.
+              The office is a five-minute drive from Downtown and ten from the Marina road. When
+              we open, viewings will start here with coffee and a map.
             </p>
           }
         />
@@ -96,18 +97,20 @@ export function LocationSection() {
                     {lat.toFixed(4)}&deg; N, {lng.toFixed(4)}&deg; E
                   </dd>
                 </div>
+                {/* Opening hours would be the one false note on the page: the
+                    office is not receiving visitors yet. */}
                 <div>
-                  <dt className="eyebrow mb-3 text-[#B88D5B]">Hours</dt>
+                  <dt className="eyebrow mb-3 text-[#B88D5B]">Doors open</dt>
                   <dd className="body-base text-[#F5F3EF]/75">
-                    Sunday &ndash; Thursday, 9:00 &ndash; 19:00 GST
+                    {launchLine(launchStatus())}
                     <br />
-                    Saturday by appointment
+                    <span className="text-[#F5F3EF]/45">Not yet open to visitors.</span>
                   </dd>
                 </div>
                 <div>
                   <dt className="eyebrow mb-3 text-[#B88D5B]">Parking</dt>
                   <dd className="body-base text-[#F5F3EF]/75">
-                    Visitor bays in the basement, level B1. Tell reception you are with HLG.
+                    Visitor bays in the basement, level B1 &mdash; ready for the day we open.
                   </dd>
                 </div>
               </dl>
@@ -117,7 +120,7 @@ export function LocationSection() {
                   Get directions
                 </CTA>
                 <CTA href={site.whatsappHref} tone="ghost" magnetic={false} className="w-full">
-                  Message before you come
+                  Ask us anything
                 </CTA>
               </div>
             </div>

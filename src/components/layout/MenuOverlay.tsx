@@ -6,12 +6,13 @@ import { img } from '../../data/images'
 import { Monogram } from '../brand/Monogram'
 import { useScrollLock } from '../../lib/hooks'
 
+/** One frame per nav entry. Keys must track `nav` in data/site.ts. */
 const PREVIEW: Record<string, string> = {
   home: img.cityDawn,
   about: img.coastBeach,
-  services: img.interiorPoolView,
-  properties: img.villaPool,
+  value: img.interiorPoolView,
   team: img.cityNight,
+  location: img.villaPool,
   contact: img.coastAerial,
 }
 
