@@ -114,12 +114,12 @@ export function AboutSection() {
         <div className="shell relative">
           <div className="mb-12 flex items-center gap-4">
             <span className="h-1.5 w-1.5 rotate-45 bg-[#9C6625]" />
-            <span className="eyebrow text-[#B88D5B]">Who we are</span>
+            <span className="eyebrow text-[#B88D5B]">About us</span>
             <span className="h-px flex-1 bg-[#F5F3EF]/10" />
             <span className="eyebrow text-[#F5F3EF]/30">{site.city}</span>
           </div>
 
-          <p className="max-w-[22ch] font-display text-[clamp(1.75rem,4.4vw,3.6rem)] font-light leading-[1.16] tracking-[-0.03em] sm:max-w-[26ch] lg:ml-auto lg:max-w-[20ch]">
+          <p className="max-w-[28ch] font-display text-[clamp(1.35rem,2.7vw,2.25rem)] font-light leading-[1.28] tracking-[-0.025em] sm:max-w-[34ch] lg:ml-auto lg:max-w-[26ch]">
             {words.map((w, i) => {
               const start = i / words.length
               const end = start + 1 / words.length
@@ -134,6 +134,41 @@ export function AboutSection() {
               )
             })}
           </p>
+        </div>
+      </div>
+
+      {/* --- vision & mission ------------------------------------------------ */}
+      <div className="relative overflow-hidden border-b hairline bg-[#131315] section-y">
+        <div className="chevron-field pointer-events-none absolute inset-0 opacity-30" />
+        <div className="shell relative">
+          <ul className="grid gap-px overflow-hidden border hairline md:grid-cols-2">
+            {[
+              {
+                k: 'Vision',
+                t: 'The address people pass on.',
+                d: 'Not the largest brokerage in Dubai — the one whose advice gets repeated at dinner. We would rather be the name a client gives a friend than the name at the top of a portal.',
+              },
+              {
+                k: 'Mission',
+                t: 'Fewer mandates, held properly.',
+                d: 'To take on less than we could, so every client has an advisor who knows their brief, their community and their numbers without looking them up. Advice you would give your own family, or none at all.',
+              },
+            ].map((v, i) => (
+              <motion.li
+                key={v.k}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={inView}
+                transition={{ duration: 0.8, ease: EASE, delay: i * 0.12 }}
+                className="group relative bg-[#1C1C1E] p-9 transition-colors duration-700 hover:bg-[#232326] md:p-12"
+              >
+                <span className="absolute right-9 top-9 h-1.5 w-1.5 rotate-45 bg-[#9C6625] transition-transform duration-700 group-hover:scale-[2.2]" />
+                <p className="eyebrow mb-7 text-[#B88D5B]">Our {v.k.toLowerCase()}</p>
+                <h3 className="display-sm mb-5 max-w-[18ch]">{v.t}</h3>
+                <p className="body-base max-w-md text-[#F5F3EF]/55">{v.d}</p>
+              </motion.li>
+            ))}
+          </ul>
         </div>
       </div>
 

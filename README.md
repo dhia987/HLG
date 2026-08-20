@@ -76,7 +76,7 @@ src/
 | # | Section id | Contains |
 | --- | --- | --- |
 | 01 | `home` | Hero — tagline, four-frame city dissolve |
-| 02 | `about` | Positioning statement, our story, **CEO & Founder**, **Why choose HLG** (six reasons), why Dubai, closing plate |
+| 02 | `about` | Positioning statement, **Vision & Mission**, our story, **CEO & Founder**, **Why choose HLG** (six reasons), why Dubai, closing plate |
 | 03 | `buy` | Buy — image, narrative, capability grid, through to the portfolio |
 | 04 | `sell` | Sell — same shape, mirrored, with a valuation request |
 | 05 | `rent` | Rent — same shape as Buy |
@@ -170,9 +170,9 @@ Each is marked with a comment in the source.
    third-party trademarks and need written permission.
 4. **Journal** — `src/data/posts.ts` contains six demonstration articles.
    Replace them or point the module at a CMS.
-5. **Office location** — `site.geo` in `src/data/site.ts` is an approximate
-   Business Bay coordinate. Set the exact office position, and check the
-   parking/hours copy in `LocationSection.tsx`.
+5. **Office detail** — the address and coordinates are set to The Binary by OMNIYAT,
+   Business Bay, from the client's Google Maps pin. Add the floor and office number,
+   and check the parking/hours copy in `LocationSection.tsx`.
 6. **Testimonials** — `src/components/sections/Testimonials.tsx`.
 7. **Social feed tiles** — `src/components/sections/SocialSection.tsx`.
 8. **Photography** — every image resolves through `src/data/images.ts`. These are
@@ -182,7 +182,11 @@ Each is marked with a comment in the source.
 9. **Contact form** — `src/components/sections/ContactSection.tsx` currently
    fakes the round trip so the interaction can be reviewed. Replace the
    `setTimeout` in `onSubmit` with a POST to your CRM or form endpoint.
-10. **Social URLs** — the handles in `src/data/site.ts` are built from the
+10. **Legal pages** — `public/terms.html` and `public/privacy-policy.html` are
+   branded placeholders that say plainly they are unpublished. The wording must be
+   drafted and approved by HLG's legal advisor before launch; they are `noindex`
+   until then.
+11. **Social URLs** — the handles in `src/data/site.ts` are built from the
    guideline's LinkedIn reference; confirm the real profile URLs.
 
 ## Deployment

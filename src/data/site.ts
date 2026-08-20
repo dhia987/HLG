@@ -14,9 +14,11 @@ export const site = {
   phoneHref: 'tel:+971506500206',
   whatsappHref: 'https://wa.me/971506500206',
   website: 'www.hlgrealestate.com',
-  address: 'Business Bay, Dubai - United Arab Emirates',
-  /** Used by the map embed. Replace with the exact office coordinates. */
-  geo: { lat: 25.1857, lng: 55.2645 },
+  address: 'The Binary by OMNIYAT, Business Bay, Dubai - United Arab Emirates',
+  addressShort: 'The Binary by OMNIYAT, Business Bay',
+  mapsUrl: 'https://maps.app.goo.gl/wXacjuWZWtmQVeE17',
+  /** The Binary by OMNIYAT, Business Bay - from the office Google Maps pin. */
+  geo: { lat: 25.187437, lng: 55.2667726 },
   social: [
     {
       label: 'LinkedIn',

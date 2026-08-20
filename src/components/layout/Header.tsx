@@ -175,7 +175,10 @@ export function Header() {
               </LayoutGroup>
             </nav>
 
-            <Magnetic strength={0.24}>
+            {/* Client note: with every section listed in the bar, a menu button
+                beside it is duplicate navigation. It returns below xl, where the
+                nav is hidden and it is the only way through the site. */}
+            <Magnetic strength={0.24} className="xl:hidden">
               <button
                 onClick={() => setMenuOpen((v) => !v)}
                 data-cursor="link"

@@ -3,15 +3,43 @@ import { Marquee } from '../ui/Marquee'
 import { CTA } from '../ui/Button'
 import { MaskText } from '../ui/Reveal'
 import { Magnetic } from '../ui/Magnetic'
-import { nav, site } from '../../data/site'
-import { services } from '../../data/services'
+import { SocialIcon } from './SocialIcons'
+import { site } from '../../data/site'
+import { communities, propertyTypes } from '../../data/properties'
+import { developers } from '../../data/developers'
 import { useSmoothScroll } from '../../lib/SmoothScroll'
 import { useSectionNav } from '../../lib/useSectionNav'
+import { useSearch } from '../../lib/SearchContext'
+
+/** Six of twelve — the ones HLG actually leads with. */
+const FOOTER_COMMUNITIES = [
+  'Palm Jumeirah',
+  'Downtown Dubai',
+  'Emirates Hills',
+  'Dubai Marina',
+  'Business Bay',
+  'Dubai Creek Harbour',
+]
+
+const FOOTER_TYPES = ['Apartment', 'Villa', 'Penthouse', 'Townhouse', 'Duplex', 'Loft']
+
+/** Duplex -> Duplexes, not Duplexs. */
+const plural = (t: string) => (/(x|s|ch|sh)$/i.test(t) ? t + 'es' : t + 's')
 
 export function Footer() {
   const { scrollTo } = useSmoothScroll()
   const { goTo } = useSectionNav()
+  const { applyFilter } = useSearch()
   const year = new Date().getFullYear()
+
+  /** Footer links are shortcuts into the portfolio, not a second navigation. */
+  const filterTo = (partial: Parameters<typeof applyFilter>[0]) => {
+    applyFilter(partial)
+    goTo('properties')
+  }
+
+  const linkCls =
+    'link-underline text-left text-[0.88rem] font-light text-[#F5F3EF]/60 transition-colors duration-500 hover:text-[#F5F3EF]'
 
   return (
     <footer className="relative overflow-hidden bg-[#131315]">
@@ -53,103 +81,177 @@ export function Footer() {
         </Marquee>
       </div>
 
-      {/* directory */}
-      <div className="shell grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
-        <div>
-          <Logo variant="white" className="mb-7 h-11 w-auto" />
+      {/* directory — shortcuts into the portfolio, not a copy of the navbar */}
+      <div className="shell grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.5fr_repeat(4,1fr)] lg:gap-10">
+        <div className="lg:pr-8">
+          <Logo variant="white" className="mb-7 h-12 w-auto" />
           <p className="body-base max-w-xs text-[#F5F3EF]/50">
             {site.legalName}. A {site.city} real estate house for buying, selling, renting and
             holding property with intent.
           </p>
         </div>
 
-        <nav>
-          <p className="eyebrow mb-6 text-[#B88D5B]">Navigate</p>
-          <ul className="space-y-3">
-            {nav.map((item) => (
-              <li key={item.id}>
-                <button
-                  onClick={() => goTo(item.id)}
-                  data-cursor="link"
-                  className="link-underline body-base text-[#F5F3EF]/70"
-                >
-                  {item.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
         <div>
-          <p className="eyebrow mb-6 text-[#B88D5B]">Desks</p>
+          <p className="eyebrow mb-6 text-[#B88D5B]">Communities</p>
           <ul className="space-y-3">
-            {services.map((s) => (
-              <li key={s.id}>
+            {FOOTER_COMMUNITIES.filter((c) => communities.includes(c)).map((c) => (
+              <li key={c}>
                 <button
-                  onClick={() => goTo(s.id)}
+                  onClick={() => filterTo({ community: c })}
                   data-cursor="link"
-                  className="link-underline body-base text-[#F5F3EF]/70"
+                  className={linkCls}
                 >
-                  {s.title}
+                  {c}
                 </button>
               </li>
             ))}
+            <li>
+              <button
+                onClick={() => filterTo({})}
+                data-cursor="link"
+                className={`${linkCls} text-[#B88D5B]/80`}
+              >
+                All communities
+              </button>
+            </li>
           </ul>
         </div>
 
         <div>
-          <p className="eyebrow mb-6 text-[#B88D5B]">Connect</p>
+          <p className="eyebrow mb-6 text-[#B88D5B]">Property types</p>
           <ul className="space-y-3">
+            {FOOTER_TYPES.filter((t) => propertyTypes.includes(t)).map((t) => (
+              <li key={t}>
+                <button onClick={() => filterTo({ type: t })} data-cursor="link" className={linkCls}>
+                  {plural(t)}
+                </button>
+              </li>
+            ))}
+            <li>
+              <button
+                onClick={() => filterTo({ listing: 'rent' })}
+                data-cursor="link"
+                className={linkCls}
+              >
+                To rent
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="eyebrow mb-6 text-[#B88D5B]">Developers</p>
+          <ul className="space-y-3">
+            {developers.slice(0, 6).map((d) => (
+              <li key={d.id}>
+                <button
+                  onClick={() => goTo('developers')}
+                  data-cursor="link"
+                  className={linkCls}
+                >
+                  {d.name}
+                </button>
+              </li>
+            ))}
+            <li>
+              <button
+                onClick={() => goTo('developers')}
+                data-cursor="link"
+                className={`${linkCls} text-[#B88D5B]/80`}
+              >
+                All developers
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="eyebrow mb-6 text-[#B88D5B]">Contact</p>
+          <ul className="space-y-4">
             <li>
               <a
-                href={`mailto:${site.email}`}
+                href={site.mapsUrl}
+                target="_blank"
+                rel="noreferrer"
                 data-cursor="link"
-                className="link-underline body-base text-[#F5F3EF]/70"
+                className="block text-[0.88rem] font-light leading-relaxed text-[#F5F3EF]/60 transition-colors duration-500 hover:text-[#F5F3EF]"
               >
-                {site.email}
+                {site.addressShort}
+                <br />
+                {site.city}, {site.country}
               </a>
             </li>
             <li>
-              <a
-                href={site.phoneHref}
-                data-cursor="link"
-                className="link-underline body-base text-[#F5F3EF]/70"
-              >
+              <a href={site.phoneHref} data-cursor="link" className={linkCls}>
                 {site.phone}
               </a>
             </li>
-            {site.social.map((s) => (
-              <li key={s.label}>
-                <a
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-cursor="link"
-                  className="link-underline body-base text-[#F5F3EF]/70"
-                >
-                  {s.label}
-                </a>
-              </li>
-            ))}
+            <li>
+              <a
+                href={site.whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                data-cursor="link"
+                className={linkCls}
+              >
+                WhatsApp
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${site.email}`} data-cursor="link" className={linkCls}>
+                {site.email}
+              </a>
+            </li>
           </ul>
         </div>
       </div>
 
+      {/* social row */}
+      <div className="shell flex justify-center border-t hairline py-7">
+        <ul className="flex items-center gap-3">
+          {site.social.map((s) => (
+            <li key={s.label}>
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={s.label}
+                data-cursor="link"
+                className="flex h-11 w-11 items-center justify-center rounded-full border hairline text-[#F5F3EF]/60 transition-[color,border-color,background-color] duration-500 hover:border-[#9C6625] hover:bg-[#9C6625] hover:text-[#F5F3EF]"
+              >
+                <SocialIcon label={s.label} className="h-[18px] w-[18px]" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* colophon */}
-      <div className="shell flex flex-col gap-4 border-t hairline py-7 text-[0.68rem] uppercase tracking-[0.18em] text-[#F5F3EF]/35 sm:flex-row sm:items-center sm:justify-between">
-        <p>
-          &copy; {year} {site.name}. {site.legalName}.
+      <div className="shell flex flex-col gap-5 border-t hairline pb-28 pt-7 sm:flex-row sm:items-center sm:justify-between sm:pb-24">
+        <p className="text-[0.68rem] uppercase tracking-[0.16em] text-[#F5F3EF]/35">
+          &copy; {year} {site.name}. {site.legalName}. All rights reserved.
         </p>
-        <p className="hidden md:block">{site.address}</p>
-        <Magnetic strength={0.2}>
-          <button
-            onClick={() => scrollTo(0)}
-            data-cursor="link"
-            className="link-underline uppercase tracking-[0.18em]"
-          >
-            Back to top &#8593;
+
+        <div className="flex flex-wrap items-center gap-x-7 gap-y-3 text-[0.68rem] uppercase tracking-[0.16em] text-[#F5F3EF]/35">
+          <a href="/terms.html" data-cursor="link" className="link-underline">
+            Terms
+          </a>
+          <a href="/privacy-policy.html" data-cursor="link" className="link-underline">
+            Privacy
+          </a>
+          <button onClick={() => goTo('team')} data-cursor="link" className="link-underline uppercase tracking-[0.16em]">
+            Careers
           </button>
-        </Magnetic>
+          <Magnetic strength={0.2}>
+            <button
+              onClick={() => scrollTo(0)}
+              data-cursor="link"
+              className="link-underline uppercase tracking-[0.16em]"
+            >
+              Back to top &#8593;
+            </button>
+          </Magnetic>
+        </div>
       </div>
     </footer>
   )

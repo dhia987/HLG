@@ -5,6 +5,7 @@ import { Footer } from './components/layout/Footer'
 import { Cursor } from './components/layout/Cursor'
 import { Preloader } from './components/layout/Preloader'
 import { ScrollProgress } from './components/layout/ScrollProgress'
+import { WhatsAppButton } from './components/layout/WhatsAppButton'
 import { PropertyProvider } from './components/sections/PropertyOverlay'
 import { SearchProvider } from './lib/SearchContext'
 import Home from './pages/Home'
@@ -27,6 +28,7 @@ export default function App() {
         <Cursor />
         <ScrollProgress />
         <Header />
+        <WhatsAppButton />
 
         <main id="main">
           <Home introDone={introDone} />
