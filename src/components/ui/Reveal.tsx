@@ -26,8 +26,20 @@ export function Unveil({
   duration?: number
   tone?: string
 }) {
+  // The curtain is absolutely positioned, so this wrapper has to be a
+  // containing block - hence the default `relative`. But a caller that
+  // positions the wrapper itself, as the team grid does with
+  // `absolute inset-0`, has to win. Tailwind emits both position utilities at
+  // equal specificity, so a hardcoded `relative` silently defeats the passed
+  // `absolute` and the box then sizes to its content instead of to the frame.
+  // That is invisible with a portrait source, which overflows and gets clipped
+  // anyway, and obvious the moment a square one is dropped in.
+  const positioned = /(?:^|\s)(?:absolute|fixed|sticky|static|relative)(?:\s|$)/.test(
+    className ?? '',
+  )
+
   return (
-    <div className={`relative overflow-hidden ${className ?? ''}`}>
+    <div className={`${positioned ? '' : 'relative'} overflow-hidden ${className ?? ''}`}>
       {children}
       <motion.span
         aria-hidden="true"

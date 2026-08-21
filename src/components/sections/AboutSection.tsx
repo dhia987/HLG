@@ -130,7 +130,7 @@ export function AboutSection() {
               {
                 k: 'Vision',
                 t: 'The address people pass on.',
-                d: 'Not the largest brokerage in Dubai — the one whose advice gets repeated at dinner. We would rather be the name a client gives a friend than the name at the top of a portal.',
+                d: 'Not the largest brokerage in Dubai, but the one whose advice gets repeated at dinner. We would rather be the name a client gives a friend than the name at the top of a portal.',
               },
               {
                 k: 'Mission',
@@ -184,7 +184,7 @@ export function AboutSection() {
             <div className="mt-9 space-y-6">
               <Reveal>
                 <p className="body-lg text-[#F5F3EF]/70">
-                  Anyone can answer the first question &mdash; what is available. HLG is being
+                  Anyone can answer the first question: what is available. HLG is being
                   built for the second one: whether it is right, at this price, in this community,
                   for the life you actually intend to live here.
                 </p>
@@ -259,9 +259,8 @@ export function AboutSection() {
             <div className="mt-9 space-y-6">
               <Reveal>
                 <p className="body-lg text-[#F5F3EF]/70">
-                  &ldquo;I spent fifteen years between European private banking and Gulf real
-                  estate, and the thing that struck me about Dubai was how little of the market
-                  was built around advice. Plenty of inventory. Very little judgement.&rdquo;
+                  &ldquo;What struck me about Dubai was how little of the market was built
+                  around advice. Plenty of inventory. Very little judgement.&rdquo;
                 </p>
               </Reveal>
               <Reveal delay={1}>
@@ -315,7 +314,7 @@ export function AboutSection() {
             aside={
               <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
                 Dubai stopped being a bet some time ago. What remains is a question of where,
-                when and with whom &mdash; which is precisely the part we intend to answer.
+                when and with whom, which is precisely the part we intend to answer.
               </p>
             }
           />

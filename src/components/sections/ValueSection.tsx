@@ -63,7 +63,7 @@ export function ValueSection() {
           aside={
             <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
               We have not opened yet, so we will not point you at a track record we do not have.
-              What we can do is set down the standard we intend to be held to &mdash; and then be
+              What we can do is set down the standard we intend to be held to, and then be
               held to it.
             </p>
           }

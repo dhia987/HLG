@@ -131,7 +131,7 @@ export function Hero({ ready }: { ready: boolean }) {
               className="body-lg max-w-md text-[#F5F3EF]/70"
             >
               A {site.city} real estate house built on judgement, discretion and long
-              relationships. The chapter has not started yet &mdash; be on the list when it does.
+              relationships. The chapter has not started yet. Be on the list when it does.
             </motion.p>
 
             <motion.div

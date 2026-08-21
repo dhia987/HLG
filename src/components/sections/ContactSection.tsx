@@ -51,8 +51,7 @@ export function ContactSection() {
           aside={
             <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
               We are opening with a list rather than an inbox. Tell us what you are looking for
-              and you will hear from a named advisor &mdash; not a newsletter &mdash; when the
-              doors open.
+              and you will hear from a named advisor, not a newsletter, when the doors open.
             </p>
           }
         />
@@ -73,7 +72,7 @@ export function ContactSection() {
                   <Monogram variant="white" animated className="mb-8 h-14 w-14" />
                   <h3 className="display-md mb-5">You are on the list.</h3>
                   <p className="body-lg mb-9 max-w-md text-[#F5F3EF]/60">
-                    Thank you &mdash; your name is down. We will be in touch before we open, and a
+                    Thank you. Your name is down. We will be in touch before we open, and a
                     named advisor will pick up your brief from there. Nothing else lands in your
                     inbox in the meantime.
                   </p>

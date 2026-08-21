@@ -120,10 +120,24 @@ The `#vision` / `#story` / `#founder` / `#dubai` ids are **not** nav entries. Th
 reads `nav`, so extra ids cost nothing — and they give the footer real destinations that the
 navbar does not already hold, which is what keeps it a directory rather than a second navbar.
 
-The map is an **OpenStreetMap** embed — no API key, no tracking cookie. It is
-inverted and hue-rotated in CSS so the tiles land in the site's anthracite
-range. Swap the iframe in `LocationSection.tsx` for a keyed Google or Mapbox
-embed if the client wants Street View or custom styling.
+The map is a **Google Maps** embed, using the keyless `output=embed` form of the classic maps
+URL — the official Maps Embed API needs a billable key. "Get directions" uses the documented
+Maps URLs API, which opens the native app on mobile. Both live at the top of
+`LocationSection.tsx`.
+
+Two things to know about it:
+
+- **It sets Google cookies on load.** The previous OpenStreetMap embed did not. This belongs
+  in the privacy policy and in any cookie notice.
+- **The dark look is a CSS filter** (`invert` + `hue-rotate`) applied to the iframe, plus a
+  bronze `mix-blend-overlay` wash. It lands the tiles in the site's anthracite range, but it
+  also alters Google's own rendering and their logo, which Google's terms discourage. The
+  clean fix is a Maps Platform key with a dark **Map ID**, which gives the same look through
+  Google's own styling — swap `EMBED` for
+  `https://www.google.com/maps/embed/v1/place?key=...&q=...` and drop the filter classes.
+
+The bottom edge of the map frame belongs to Google — logo left, "Map data / Terms" right. The
+HLG corner plate sits top-left for that reason; do not move it back.
 
 ### What was removed, and why
 
@@ -169,9 +183,9 @@ piece rather than a pile of effects.
 - **Reduced motion** — `MotionConfig reducedMotion="user"` plus a CSS fallback;
   Lenis, parallax, the marquee and the custom cursor all switch themselves off.
 
-### Four traps worth knowing about
+### Five traps worth knowing about
 
-All four were hit during the build and are commented in the source:
+All five were hit during the build and are commented in the source:
 
 1. **Never put `whileInView` on an element that is clipped out of view.**
    IntersectionObserver accounts for ancestor clipping, so a masked line sitting
@@ -189,6 +203,15 @@ All four were hit during the build and are commented in the source:
    390×640 once the launch marker made the content block taller. `min-h` is
    identical wherever the content fits and simply grows where it does not
    (`sections/Hero.tsx`).
+5. **Tailwind position utilities do not lose to class-attribute order.** `Unveil`
+   hardcoded `relative` and the team grid passed `absolute inset-0`; the two are
+   emitted at equal specificity, so the hardcoded one won and the wrapper sized
+   to its content rather than to the frame. Invisible with the tall Unsplash
+   portraits — which overflow and get clipped anyway — and immediately obvious
+   the first time a **square** photo was dropped in, leaving a gap under the
+   card. `Unveil` now only applies `relative` when the caller has not positioned
+   it (`ui/Reveal.tsx`). **Portraits do not have to be 3:4, but do check a new
+   one actually fills its card.**
 
 ---
 
@@ -198,9 +221,15 @@ Each is marked with a comment in the source.
 
 1. **The opening time** — the date is set (15 September 2026) but the *hour* is a stand-in.
    See [The opening date](#the-opening-date).
-2. **Team** — `src/data/team.ts` holds stand-in names, roles, bios and portraits.
-   The founder block in the About section reads from `team[0]`, so update that
-   record and the quotes in `AboutSection.tsx`.
+2. **Team** — `src/data/team.ts`. Advisors 2 to 6 are entirely stand-in: names, roles, bios
+   and portraits.
+
+   `team[0]` is a mixed record and needs care. **Real:** the founder's name (Mourad Mrad) and
+   his portrait, self-hosted at `public/team/mourad-mrad.jpg`. **Still ours, and awaiting his
+   sign-off:** his bio, his listed languages, and the LinkedIn URL, which currently points at
+   the company page rather than a personal profile. The founder statement in
+   `AboutSection.tsx` needs the same treatment — it is set in quotation marks beside his face,
+   so it reads as something he actually said. Get his own words, or his approval of these.
 3. **Office detail** — the address and coordinates are set to The Binary by OMNIYAT,
    Business Bay, from the client's Google Maps pin. Add the floor and office number,
    and check the parking copy in `LocationSection.tsx`.

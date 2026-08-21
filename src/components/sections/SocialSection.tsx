@@ -33,7 +33,7 @@ export function SocialSection() {
           aside={
             <div className="lg:pb-3">
               <p className="body-lg mb-7 text-[#F5F3EF]/60">
-                The city, the build-up and honest market notes &mdash; posted as they happen.
+                The city, the build-up and honest market notes, posted as they happen.
                 Everything else waits until the doors open.
               </p>
               <ul className="flex flex-wrap gap-3">

@@ -2,6 +2,12 @@
  * PLACEHOLDER TEAM.
  * Names, roles, bios and portraits are stand-ins so the layout can be reviewed.
  * Replace every entry with the real HLG Real Estate team before launch.
+ *
+ * EXCEPT the first record. The founder's name and portrait are real; his bio
+ * and languages are still ours, and they appear on the site over his own face.
+ * They need his sign-off, or his own words, before this goes live. The same
+ * goes for the founder statement in `sections/AboutSection.tsx`, which is set
+ * in quotation marks and therefore reads as something he actually said.
  */
 export type Member = {
   id: string
@@ -16,13 +22,14 @@ export type Member = {
 export const team: Member[] = [
   {
     id: 'director',
-    name: 'Adrien Laurent',
+    name: 'Mourad Mrad',
     role: 'Founder & CEO',
-    bio: 'Fifteen years between European private banking and Gulf real estate. Adrien built HLG around a single conviction: advice you would give your own family, or none at all.',
-    languages: 'English / French / Arabic',
-    image:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1000&q=80',
-    linkedin: 'https://www.linkedin.com/company/hlgrealestate',
+    // The invented career history that used to sit here has been removed: it
+    // was written for a placeholder and should not be attached to a real name.
+    bio: 'Founder of HLG Real Estate. Mourad built the house around a single conviction: advice you would give your own family, or none at all.',
+    languages: 'English / French / Arabic', // TO CONFIRM with Mourad
+    image: '/team/mourad-mrad.jpg',
+    linkedin: 'https://www.linkedin.com/company/hlgrealestate', // TO CONFIRM: personal profile
   },
   {
     id: 'sales',

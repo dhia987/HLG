@@ -7,20 +7,25 @@ import { CTA } from '../ui/Button'
 import { launchLine, launchStatus } from '../ui/Countdown'
 
 const { lat, lng } = site.geo
-const SPAN = 0.012
+const ZOOM = 16
 
 /**
- * OpenStreetMap needs no API key and no tracking cookie, which is why it is
- * here rather than Google Maps. Swap the iframe for a keyed Google/Mapbox embed
- * if the client wants Street View or their own styling.
+ * Google Maps, embedded without an API key.
+ *
+ * The `output=embed` form of the classic maps URL is the only Google embed
+ * that works keyless - the official Maps Embed API needs a billable key. If
+ * one is ever provisioned, swap this for
+ * `https://www.google.com/maps/embed/v1/place?key=...`, which is the supported
+ * endpoint and also unlocks Google's own dark styling (see the note on the
+ * iframe below).
+ *
+ * Trade-off accepted in making this swap: unlike the previous OpenStreetMap
+ * embed, this sets Google cookies on load, so it belongs in the cookie notice.
  */
-const EMBED = `https://www.openstreetmap.org/export/embed.html?bbox=${(lng - SPAN).toFixed(4)}%2C${(
-  lat - SPAN / 1.6
-).toFixed(4)}%2C${(lng + SPAN).toFixed(4)}%2C${(lat + SPAN / 1.6).toFixed(
-  4,
-)}&layer=mapnik&marker=${lat}%2C${lng}`
+const EMBED = `https://maps.google.com/maps?q=${lat}%2C${lng}&z=${ZOOM}&hl=en&output=embed`
 
-const DIRECTIONS = `https://www.openstreetmap.org/directions?to=${lat}%2C${lng}`
+/** Maps URLs API - documented, keyless, and opens the native app on mobile. */
+const DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${lat}%2C${lng}`
 
 export function LocationSection() {
   const [loaded, setLoaded] = useState(false)
@@ -69,8 +74,11 @@ export function LocationSection() {
               </div>
             )}
 
-            {/* corner plate */}
-            <div className="pointer-events-none absolute bottom-5 left-5 border hairline bg-[#1C1C1E]/90 px-5 py-4 backdrop-blur-md">
+            {/* Corner plate, top-left. It used to sit bottom-left, which is
+                exactly where Google puts its logo - and the attribution has to
+                stay visible. The bottom edge of the frame now belongs to
+                Google: logo left, "Map data / Terms" right. */}
+            <div className="pointer-events-none absolute left-5 top-5 border hairline bg-[#1C1C1E]/90 px-5 py-4 backdrop-blur-md">
               <p className="eyebrow mb-2 text-[#B88D5B]">{site.name}</p>
               <p className="text-sm font-light text-[#F5F3EF]/80">{site.address}</p>
             </div>
@@ -110,7 +118,7 @@ export function LocationSection() {
                 <div>
                   <dt className="eyebrow mb-3 text-[#B88D5B]">Parking</dt>
                   <dd className="body-base text-[#F5F3EF]/75">
-                    Visitor bays in the basement, level B1 &mdash; ready for the day we open.
+                    Visitor bays in the basement, level B1, ready for the day we open.
                   </dd>
                 </div>
               </dl>

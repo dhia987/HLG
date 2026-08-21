@@ -21,7 +21,7 @@ export function TeamSection() {
             aside={
               <p className="body-lg text-[#F5F3EF]/60 lg:pb-3">
                 Six advisors, each owning a side of the market. They are in place before the
-                doors are, which is rather the point &mdash; no pooled leads, no call centre, and
+                doors are, which is rather the point. No pooled leads, no call centre, and
                 nobody hired in a hurry once the phone starts ringing.
               </p>
             }
